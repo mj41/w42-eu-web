@@ -1,0 +1,47 @@
+// Command w42-eu-web serves the w42.eu landing page: a list of the projects that
+// run under w42.eu, with links to mj41.cz and GitHub. The page is embedded.
+package main
+
+import (
+	_ "embed"
+	"flag"
+	"log/slog"
+	"net/http"
+	"os"
+	"time"
+)
+
+//go:embed index.html
+var indexHTML []byte
+
+func main() {
+	listen := flag.String("listen", ":8080", "HTTP listen address")
+	flag.Parse()
+	log := slog.New(slog.NewTextHandler(os.Stderr, nil))
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
+		h := w.Header()
+		h.Set("Content-Type", "text/html; charset=utf-8")
+		h.Set("Cache-Control", "public, max-age=300")
+		h.Set("Content-Security-Policy", "default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'")
+		h.Set("X-Content-Type-Options", "nosniff")
+		h.Set("Referrer-Policy", "strict-origin-when-cross-origin")
+		w.Write(indexHTML)
+	})
+	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte("ok\n")) })
+
+	srv := &http.Server{
+		Addr:              *listen,
+		Handler:           mux,
+		ReadHeaderTimeout: 5 * time.Second,
+		ReadTimeout:       10 * time.Second,
+		WriteTimeout:      10 * time.Second,
+		IdleTimeout:       60 * time.Second,
+	}
+	log.Info("w42-eu-web listening", "listen", *listen)
+	if err := srv.ListenAndServe(); err != nil {
+		log.Error("server stopped", "err", err)
+		os.Exit(1)
+	}
+}

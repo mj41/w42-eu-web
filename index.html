@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>w42.eu</title>
+<meta name="description" content="Projects under w42.eu: a Minecraft server, Stackchan robots, and a local first home platform. By mj41.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%235b6cff'/%3E%3Ctext x='32' y='43' font-family='sans-serif' font-size='28' font-weight='700' text-anchor='middle' fill='white'%3Ew42%3C/text%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #f4f6ff; --card: #ffffff; --text: #1e2355; --muted: #5a618e; --accent: #4a5bf0;
+    --line: #e1e5fb;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #12142a; --card: #1c1f3d; --text: #e8eaff; --muted: #a3a8cc; --accent: #9aa6ff; --line: #2c3060; }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  main { max-width: 760px; margin: 0 auto; padding: 48px 16px 32px; }
+  h1 { font-size: 2.2rem; margin: 0 0 4px; letter-spacing: -0.02em; }
+  .sub { color: var(--muted); margin: 0 0 32px; }
+  .cards { display: grid; gap: 16px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+    padding: 20px 22px;
+  }
+  .card h2 { margin: 0 0 6px; font-size: 1.25rem; }
+  .card h2 a { color: var(--text); text-decoration: none; }
+  .card h2 a:hover { color: var(--accent); }
+  .card p { margin: 0 0 10px; }
+  .links { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.92rem; }
+  a { color: var(--accent); }
+  .tag {
+    display: inline-block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 1px 9px;
+    margin-left: 8px; vertical-align: middle;
+  }
+  footer { color: var(--muted); font-size: 0.92rem; margin-top: 36px; display: flex; flex-wrap: wrap; gap: 6px 18px; }
+  footer a { color: inherit; }
+</style>
+</head>
+<body>
+<main>
+  <h1>w42.eu</h1>
+  <p class="sub">Things <a href="https://mj41.cz">mj41</a> runs and builds for fun, for family and friends.</p>
+
+  <div class="cards">
+    <section class="card">
+      <h2><a href="https://mc.w42.eu">mc.w42.eu</a></h2>
+      <p>A Minecraft server.</p>
+      <div class="links"><a href="https://mc.w42.eu">mc.w42.eu</a></div>
+    </section>
+
+    <section class="card">
+      <h2><a href="https://chan.w42.eu">chan.w42.eu</a><span class="tag">proof of concept</span></h2>
+      <p>A dashboard for M5Stack Stackchan robots in Embody Mode: pair a robot by the QR
+      code on its screen, then see through its camera, hear it, talk through it and move it,
+      from any browser.</p>
+      <div class="links">
+        <a href="https://chan.w42.eu">chan.w42.eu</a>
+        <a href="https://github.com/mj41/stackchan-server">stackchan-server</a>
+        <a href="https://github.com/mj41/StackChan/tree/embody-mj41">robot firmware</a>
+        <a href="https://github.com/mj41/StackChan/blob/embody-mj41/firmware/main/apps/app_embody_mode/SETUP.md">set up a robot</a>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2><a href="https://github.com/mj41/home-w42-eu">home-w42-eu</a><span class="tag">design and proofs of concept</span></h2>
+      <p>A local first, security and privacy first platform for a home: Go servers on a small
+      machine at home, every device (new or old) a light client of them, and loops that AI
+      helps you write and you approve. The Stackchan robots, a pet app for kids and a
+      micro:bit car are its first devices.</p>
+      <div class="links">
+        <a href="https://github.com/mj41/home-w42-eu">home-w42-eu</a>
+        <a href="https://github.com/mj41/home-w42-eu#the-repos-today">all its repos</a>
+        <a href="https://github.com/mj41/home-w42-eu-ideas">ideas</a>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <a href="https://mj41.cz">mj41.cz</a>
+    <a href="https://github.com/mj41">github.com/mj41</a>
+    <a href="https://github.com/sponsors/mj41">sponsor mj41</a>
+    <a href="https://github.com/mj41/w42-eu-web">this page's source</a>
+  </footer>
+</main>
+</body>
+</html>
