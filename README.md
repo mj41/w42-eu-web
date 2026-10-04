@@ -5,10 +5,16 @@ The [w42.eu](https://w42.eu) landing page: the projects under w42.eu
 [home-w42-eu](https://github.com/mj41/home-w42-eu)), with links to
 [mj41.cz](https://mj41.cz) and [GitHub](https://github.com/mj41).
 
-One Go binary with the page embedded (`index.html`), no dependencies.
+It also serves [home.w42.eu](https://home.w42.eu), a page pointing to the
+[home-w42-eu](https://github.com/mj41/home-w42-eu) repositories, where the up to date
+information lives.
+
+One Go binary with the pages embedded (`index.html`, `home.html`), no dependencies. The
+request's host picks the page: `home.w42.eu` gets `home.html`, any other host `index.html`.
 
 ```bash
 go run .                 # http://localhost:8080
+curl -H 'Host: home.w42.eu' http://localhost:8080/
 ```
 
 A `v*` tag builds `ghcr.io/mj41/w42-eu-web:<tag>`.

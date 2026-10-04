@@ -1,18 +1,40 @@
 // Command w42-eu-web serves the w42.eu landing page: a list of the projects that
-// run under w42.eu, with links to mj41.cz and GitHub. The page is embedded.
+// run under w42.eu, with links to mj41.cz and GitHub. It also serves home.w42.eu,
+// a page pointing to the home-w42-eu repositories. The pages are embedded and
+// chosen by the request's host.
 package main
 
 import (
 	_ "embed"
 	"flag"
 	"log/slog"
+	"net"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 )
 
 //go:embed index.html
 var indexHTML []byte
+
+//go:embed home.html
+var homeHTML []byte
+
+// pages maps a host to its page; any other host gets the w42.eu page.
+var pages = map[string][]byte{
+	"home.w42.eu": homeHTML,
+}
+
+func page(host string) []byte {
+	if h, _, err := net.SplitHostPort(host); err == nil {
+		host = h
+	}
+	if p, ok := pages[strings.ToLower(host)]; ok {
+		return p
+	}
+	return indexHTML
+}
 
 func main() {
 	listen := flag.String("listen", ":8080", "HTTP listen address")
@@ -27,7 +49,7 @@ func main() {
 		h.Set("Content-Security-Policy", "default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'")
 		h.Set("X-Content-Type-Options", "nosniff")
 		h.Set("Referrer-Policy", "strict-origin-when-cross-origin")
-		w.Write(indexHTML)
+		w.Write(page(r.Host))
 	})
 	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte("ok\n")) })
 
