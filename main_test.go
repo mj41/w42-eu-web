@@ -12,6 +12,8 @@ func TestPage(t *testing.T) {
 		"home.w42.eu":      homeHTML,
 		"HOME.w42.eu:443":  homeHTML,
 		"home.w42.eu.evil": indexHTML,
+		"s.w42.eu":         sHTML,
+		"sm.w42.eu":        indexHTML,
 	} {
 		if !bytes.Equal(page(host), want) {
 			t.Errorf("page(%q): wrong page", host)

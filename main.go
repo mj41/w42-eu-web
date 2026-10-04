@@ -1,7 +1,7 @@
 // Command w42-eu-web serves the w42.eu landing page: a list of the projects that
 // run under w42.eu, with links to mj41.cz and GitHub. It also serves home.w42.eu,
-// a page pointing to the home-w42-eu repositories. The pages are embedded and
-// chosen by the request's host.
+// a page pointing to the home-w42-eu repositories, and s.w42.eu, the Stackchan
+// project page. The pages are embedded and chosen by the request's host.
 package main
 
 import (
@@ -21,9 +21,13 @@ var indexHTML []byte
 //go:embed home.html
 var homeHTML []byte
 
+//go:embed s.html
+var sHTML []byte
+
 // pages maps a host to its page; any other host gets the w42.eu page.
 var pages = map[string][]byte{
 	"home.w42.eu": homeHTML,
+	"s.w42.eu":    sHTML,
 }
 
 func page(host string) []byte {
