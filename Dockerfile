@@ -4,6 +4,7 @@ FROM golang:1.25.5 AS build
 WORKDIR /src
 COPY go.mod ./
 COPY main.go *.html ./
+COPY mcbot ./mcbot
 RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-s -w" -o /out/w42-eu-web .
 
 FROM gcr.io/distroless/static-debian12:nonroot

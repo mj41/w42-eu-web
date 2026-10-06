@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>mcbot.w42.eu</title>
+<meta name="description" content="Minecraft robots that play vanilla survival on their own, watched live. By mj41.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%235b6cff'/%3E%3Ctext x='32' y='43' font-family='sans-serif' font-size='28' font-weight='700' text-anchor='middle' fill='white'%3Ew42%3C/text%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #f4f6ff; --card: #ffffff; --text: #1e2355; --muted: #5a618e; --accent: #4a5bf0;
+    --line: #e1e5fb;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #12142a; --card: #1c1f3d; --text: #e8eaff; --muted: #a3a8cc; --accent: #9aa6ff; --line: #2c3060; }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  main { max-width: 760px; margin: 0 auto; padding: 48px 16px 32px; }
+  h1 { font-size: 2.2rem; margin: 0 0 4px; letter-spacing: -0.02em; }
+  .sub { color: var(--muted); margin: 0 0 32px; }
+  .cards { display: grid; gap: 16px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+    padding: 20px 22px;
+  }
+  .card h2 { margin: 0 0 6px; font-size: 1.25rem; }
+  .card p { margin: 0 0 10px; }
+  .repos { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .repos a { font-weight: 600; }
+  .lic { color: var(--muted); font-size: 0.85rem; white-space: nowrap; }
+  a { color: var(--accent); }
+  .tag {
+    display: inline-block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 1px 9px;
+    margin-left: 8px; vertical-align: middle;
+  }
+  /* the screenshot: small in the card, the full size over the page on click (no script) */
+  .shot { display: block; margin: 14px 0 6px; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; cursor: zoom-in; }
+  .shot img { display: block; width: 100%; height: auto; }
+  .caption { color: var(--muted); font-size: 0.85rem; margin: 0; }
+  .big {
+    display: none; position: fixed; inset: 0; z-index: 10; padding: 16px;
+    background: rgba(0, 0, 0, 0.88); align-items: center; justify-content: center; cursor: zoom-out;
+  }
+  .big:target { display: flex; }
+  .big img { max-width: 100%; max-height: 100%; width: auto; height: auto; border-radius: 6px; }
+  footer { color: var(--muted); font-size: 0.92rem; margin-top: 36px; display: flex; flex-wrap: wrap; gap: 6px 18px; }
+  footer a { color: inherit; }
+  footer .tm { flex-basis: 100%; }
+</style>
+</head>
+<body>
+<main>
+  <h1>mcbot.w42.eu</h1>
+  <p class="sub">Minecraft robots that play vanilla survival on their own: wood, tools, a shelter
+  before the night, food, iron, a wheat field by the water. The goal is a robot that lives through
+  a week of game days without dying. A proof of concept, vibe coded, not reviewed by humans yet.</p>
+
+  <div class="cards">
+    <section class="card">
+      <h2><a href="https://mon.mcbot.w42.eu">mon.mcbot.w42.eu</a><span class="tag">sign in</span></h2>
+      <p>The dashboard: every run live and replayed, the land it has seen, a 3D view from its
+      eyes, and what it plans and does. Sign in with GitHub or Google and ask to watch; mj41
+      approves.</p>
+      <a class="shot" href="#dashboard" title="The full size">
+        <img src="/mcbot/dashboard-small.png" width="640" height="360"
+          alt="The dashboard during a run: maps of the land and of the robot's level, the 3D view of its shelter with a chest and a furnace, the cross sections, and its log of what it gets and crafts.">
+      </a>
+      <p class="caption">Day 1 of a week run: the robot has dug a shelter, put a chest and a
+      furnace in it and holds a stone axe. Click for the <a href="/mcbot/dashboard.png">full size</a>.</p>
+    </section>
+
+    <section class="card">
+      <h2>How it is tested</h2>
+      <p>Each run starts a fresh vanilla server and lets the robot play; the clock moves on while
+      it only waits for the night to pass. A new robot reaches a running test as a signed
+      commit, built where it runs, and every run is kept, so it can be replayed and compared
+      with the next one.</p>
+    </section>
+
+    <section class="card">
+      <h2>Source</h2>
+      <ul class="repos">
+        <li><a href="https://github.com/mj41/go-mc26-kit">go-mc26-kit</a>: the bot framework the
+          robots are built on, with examples. <span class="lic">MIT</span></li>
+        <li><a href="https://github.com/mj41/go-mc26">go-mc26</a>: a Go library for Minecraft
+          26.x, generated from each release. <span class="lic">MIT</span></li>
+        <li><a href="https://github.com/mj41/mc26">mc26</a>: the pipeline that extracts the
+          data and generates the library, and the end-to-end tests. <span class="lic">MIT</span></li>
+      </ul>
+      <p style="margin-top:14px">The dashboard and the test benches are private for now.</p>
+    </section>
+  </div>
+
+  <footer>
+    <span class="tm">NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG
+    OR MICROSOFT.</span>
+    <a href="https://w42.eu">w42.eu</a>
+    <a href="https://mj41.cz">mj41.cz</a>
+    <a href="https://github.com/mj41">github.com/mj41</a>
+    <a href="https://github.com/sponsors/mj41">sponsor mj41</a>
+    <a href="https://github.com/mj41/w42-eu-web">this page's source</a>
+  </footer>
+</main>
+
+<a class="big" id="dashboard" href="#" title="Close">
+  <img src="/mcbot/dashboard.png" width="1920" height="1080" loading="lazy"
+    alt="The dashboard during a run, full size.">
+</a>
+</body>
+</html>

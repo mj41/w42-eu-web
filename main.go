@@ -1,11 +1,13 @@
 // Command w42-eu-web serves the w42.eu landing page: a list of the projects that
 // run under w42.eu, with links to mj41.cz and GitHub. It also serves home.w42.eu,
-// a page pointing to the home-w42-eu repositories, and s.w42.eu, the Stackchan
-// project page. The pages are embedded and chosen by the request's host.
+// a page pointing to the home-w42-eu repositories, s.w42.eu, the Stackchan
+// project page, and mcbot.w42.eu, the Minecraft robots' page with its
+// screenshots (/mcbot/*.png). The pages are embedded and chosen by the
+// request's host.
 package main
 
 import (
-	_ "embed"
+	"embed"
 	"flag"
 	"log/slog"
 	"net"
@@ -24,10 +26,19 @@ var homeHTML []byte
 //go:embed s.html
 var sHTML []byte
 
+//go:embed mcbot.html
+var mcbotHTML []byte
+
+// mcbotImages are mcbot.html's screenshots, served at /mcbot/<name>.png.
+//
+//go:embed mcbot/*.png
+var mcbotImages embed.FS
+
 // pages maps a host to its page; any other host gets the w42.eu page.
 var pages = map[string][]byte{
-	"home.w42.eu": homeHTML,
-	"s.w42.eu":    sHTML,
+	"home.w42.eu":  homeHTML,
+	"s.w42.eu":     sHTML,
+	"mcbot.w42.eu": mcbotHTML,
 }
 
 func page(host string) []byte {
@@ -40,11 +51,7 @@ func page(host string) []byte {
 	return indexHTML
 }
 
-func main() {
-	listen := flag.String("listen", ":8080", "HTTP listen address")
-	flag.Parse()
-	log := slog.New(slog.NewTextHandler(os.Stderr, nil))
-
+func handler() http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
 		h := w.Header()
@@ -55,11 +62,31 @@ func main() {
 		h.Set("Referrer-Policy", "strict-origin-when-cross-origin")
 		w.Write(page(r.Host))
 	})
+	// one file by name: no listing, and {name} cannot hold a "/"
+	mux.HandleFunc("GET /mcbot/{name}", func(w http.ResponseWriter, r *http.Request) {
+		b, err := mcbotImages.ReadFile("mcbot/" + r.PathValue("name"))
+		if err != nil {
+			http.NotFound(w, r)
+			return
+		}
+		h := w.Header()
+		h.Set("Content-Type", "image/png")
+		h.Set("Cache-Control", "public, max-age=86400")
+		h.Set("X-Content-Type-Options", "nosniff")
+		w.Write(b)
+	})
 	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte("ok\n")) })
+	return mux
+}
+
+func main() {
+	listen := flag.String("listen", ":8080", "HTTP listen address")
+	flag.Parse()
+	log := slog.New(slog.NewTextHandler(os.Stderr, nil))
 
 	srv := &http.Server{
 		Addr:              *listen,
-		Handler:           mux,
+		Handler:           handler(),
 		ReadHeaderTimeout: 5 * time.Second,
 		ReadTimeout:       10 * time.Second,
 		WriteTimeout:      10 * time.Second,
