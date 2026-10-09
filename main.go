@@ -1,9 +1,8 @@
 // Command w42-eu-web serves the w42.eu landing page: a list of the projects that
-// run under w42.eu, with links to mj41.cz and GitHub. It also serves home.w42.eu,
-// a page pointing to the home-w42-eu repositories, s.w42.eu, the Stackchan
-// project page, and mcbot.w42.eu, the Minecraft robots' page with its
-// screenshots (/mcbot/*.png). The pages are embedded and chosen by the
-// request's host.
+// run under w42.eu, with links to mj41.cz and GitHub. It also serves s.w42.eu,
+// the Stackchan project page with its pictures (/s/*.webp), and mcbot.w42.eu,
+// the Minecraft robots' page with its screenshots (/mcbot/*.png). The pages are
+// embedded and chosen by the request's host.
 package main
 
 import (
@@ -13,6 +12,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"path"
 	"strings"
 	"time"
 )
@@ -20,23 +20,26 @@ import (
 //go:embed index.html
 var indexHTML []byte
 
-//go:embed home.html
-var homeHTML []byte
-
 //go:embed s.html
 var sHTML []byte
 
 //go:embed mcbot.html
 var mcbotHTML []byte
 
-// mcbotImages are mcbot.html's screenshots, served at /mcbot/<name>.png.
+// images are the pages' pictures, served at /<dir>/<name>: mcbot.html's
+// screenshots and s.html's robots and screenshots.
 //
-//go:embed mcbot/*.png
-var mcbotImages embed.FS
+//go:embed mcbot/*.png s/*.webp
+var images embed.FS
+
+// imageDirs are the directories in images.
+var imageDirs = map[string]bool{"mcbot": true, "s": true}
+
+// imageTypes are the images' content types by extension.
+var imageTypes = map[string]string{".png": "image/png", ".webp": "image/webp"}
 
 // pages maps a host to its page; any other host gets the w42.eu page.
 var pages = map[string][]byte{
-	"home.w42.eu":  homeHTML,
 	"s.w42.eu":     sHTML,
 	"mcbot.w42.eu": mcbotHTML,
 }
@@ -62,15 +65,17 @@ func handler() http.Handler {
 		h.Set("Referrer-Policy", "strict-origin-when-cross-origin")
 		w.Write(page(r.Host))
 	})
-	// one file by name: no listing, and {name} cannot hold a "/"
-	mux.HandleFunc("GET /mcbot/{name}", func(w http.ResponseWriter, r *http.Request) {
-		b, err := mcbotImages.ReadFile("mcbot/" + r.PathValue("name"))
-		if err != nil {
+	// one file by name: no listing, and {dir} and {name} cannot hold a "/"
+	mux.HandleFunc("GET /{dir}/{name}", func(w http.ResponseWriter, r *http.Request) {
+		dir, name := r.PathValue("dir"), r.PathValue("name")
+		ct := imageTypes[path.Ext(name)]
+		b, err := images.ReadFile(dir + "/" + name)
+		if !imageDirs[dir] || ct == "" || err != nil {
 			http.NotFound(w, r)
 			return
 		}
 		h := w.Header()
-		h.Set("Content-Type", "image/png")
+		h.Set("Content-Type", ct)
 		h.Set("Cache-Control", "public, max-age=86400")
 		h.Set("X-Content-Type-Options", "nosniff")
 		w.Write(b)

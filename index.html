@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>w42.eu</title>
-<meta name="description" content="Projects under w42.eu: a Minecraft server, Stackchan robots, and a local first home platform. By mj41.">
+<meta name="description" content="Projects under w42.eu: Stackchan robots and their apps, Minecraft robots, a Minecraft server. By mj41.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%235b6cff'/%3E%3Ctext x='32' y='43' font-family='sans-serif' font-size='28' font-weight='700' text-anchor='middle' fill='white'%3Ew42%3C/text%3E%3C/svg%3E">
 <style>
   :root {
@@ -38,6 +38,12 @@
     color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 1px 9px;
     margin-left: 8px; vertical-align: middle;
   }
+  .robots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0 12px; }
+  .robots img { width: 100%; height: auto; display: block; }
+  .shot { display: block; margin: 10px 0 12px; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  .shot img { display: block; width: 100%; height: auto; }
+  .more { font-weight: 600; }
+  .more::after { content: " \2192"; }
   footer { color: var(--muted); font-size: 0.92rem; margin-top: 36px; display: flex; flex-wrap: wrap; gap: 6px 18px; }
   footer a { color: inherit; }
 </style>
@@ -49,47 +55,50 @@
 
   <div class="cards">
     <section class="card">
-      <h2><a href="https://mc.w42.eu">mc.w42.eu</a></h2>
-      <p>A Minecraft server.</p>
-      <div class="links"><a href="https://mc.w42.eu">mc.w42.eu</a></div>
-    </section>
-
-    <section class="card">
       <h2><a href="https://s.w42.eu">s.w42.eu</a><span class="tag">proof of concept</span></h2>
-      <p>M5Stack Stackchan robots in Embody Mode: set your robot up on sm.w42.eu, then pair a
-      phone by the QR code on its screen and see through its camera, hear it, talk through it
-      and move it, from any browser.</p>
+      <div class="robots">
+        <img src="/s/robot-pet.webp" width="300" height="330" alt="A Stackchan robot running the pet: a happy orange face">
+        <img src="/s/robot-focus.webp" width="300" height="330" alt="A Stackchan robot running Focus: a red ring and 17:42 left, its LEDs counting down">
+        <img src="/s/robot-qr.webp" width="300" height="330" alt="A Stackchan robot showing the QR code a phone scans to pair with it">
+      </div>
+      <p>M5Stack Stackchan robots in Embody Mode: the robot is a light client of apps you choose
+      and approve. Set it up on sm.w42.eu with one click over USB, pair a phone by the QR code on
+      its screen, and switch between the apps on the robot: every sensor, its camera and microphone
+      (end to end encrypted), a pet for kids, a focus timer for your desk.</p>
       <div class="links">
-        <a href="https://s.w42.eu">s.w42.eu</a>
+        <a class="more" href="https://s.w42.eu">Read more</a>
         <a href="https://sm.w42.eu">set up a robot</a>
-        <a href="https://raw.sa.w42.eu">raw.sa.w42.eu</a>
-        <a href="https://github.com/mj41/StackChan/tree/embody-mj41">robot firmware</a>
+        <a href="https://github.com/mj41/home-w42-eu">home-w42-eu</a>
       </div>
     </section>
 
     <section class="card">
       <h2><a href="https://mcbot.w42.eu">mcbot.w42.eu</a><span class="tag">proof of concept</span></h2>
-      <p>Minecraft robots that play vanilla survival on their own, aiming to live through a week
-      of game days: watch them live and replayed.</p>
+      <a class="shot" href="https://mcbot.w42.eu"><img src="/mcbot/dashboard-small.png" width="640" height="360"
+        alt="The mcbot dashboard during a run: maps of the land, a 3D view of the robot's shelter and its log"></a>
+      <p>Minecraft robots that play vanilla survival on their own: wood, tools, a shelter before
+      the night, food, iron, a wheat field by the water. The goal is a robot that lives through a
+      week of game days; every run is kept, to watch live and replay.</p>
       <div class="links">
-        <a href="https://mcbot.w42.eu">mcbot.w42.eu</a>
-        <a href="https://mon.mcbot.w42.eu">the dashboard</a>
+        <a class="more" href="https://mcbot.w42.eu">Read more</a>
         <a href="https://github.com/mj41/go-mc26-kit">go-mc26-kit</a>
       </div>
     </section>
 
     <section class="card">
-      <h2><a href="https://home.w42.eu">home.w42.eu</a><span class="tag">design and proofs of concept</span></h2>
-      <p>A local first, security and privacy first platform for a home: Go servers on a small
-      machine at home, every device (new or old) a light client of them, and loops that AI
-      helps you write and you approve. The Stackchan robots, a pet app for kids and a
-      micro:bit car are its first devices.</p>
+      <h2><a href="https://github.com/mj41">More projects</a></h2>
+      <p><a href="https://infinite.pm">infinite.pm</a> (process modeling as readable graphs), VS
+      Code and AI agent tooling, git tools, the Go Minecraft library and more, all on GitHub.</p>
       <div class="links">
-        <a href="https://home.w42.eu">home.w42.eu</a>
-        <a href="https://github.com/mj41/home-w42-eu">home-w42-eu</a>
-        <a href="https://github.com/mj41/home-w42-eu#the-repos-today">all its repos</a>
-        <a href="https://github.com/mj41/home-w42-eu-ideas">ideas</a>
+        <a class="more" href="https://github.com/mj41/mj-ofun#overview">Read more</a>
+        <a href="https://github.com/mj41">github.com/mj41</a>
       </div>
+    </section>
+
+    <section class="card">
+      <h2><a href="https://mc.w42.eu">mc.w42.eu</a></h2>
+      <p>A Minecraft server for family and friends, whitelist only.</p>
+      <div class="links"><a class="more" href="https://mc.w42.eu">Read more</a></div>
     </section>
   </div>
 

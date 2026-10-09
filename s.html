@@ -38,6 +38,27 @@
     color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 1px 9px;
     margin-left: 8px; vertical-align: middle;
   }
+  .robots { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 0 0 4px; }
+  .robots figure { margin: 0; text-align: center; }
+  .robots img { width: 100%; height: auto; display: block; }
+  .robots figcaption { color: var(--muted); font-size: 0.85rem; }
+  .note { color: var(--muted); font-size: 0.8rem; text-align: center; margin: 0 0 24px; }
+  .row { display: grid; grid-template-columns: 220px 1fr; gap: 18px; align-items: start; }
+  .apps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .app h3 { margin: 8px 0 4px; font-size: 1.05rem; }
+  .app p { font-size: 0.95rem; }
+  .shot { display: block; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; cursor: zoom-in; }
+  .shot img { display: block; width: 100%; height: auto; }
+  .shot.tall { aspect-ratio: 3 / 4; }
+  .shot.tall img { height: 100%; object-fit: cover; object-position: top; }
+  .more { font-weight: 600; }
+  .more::after { content: " \2192"; }
+  @media (max-width: 640px) {
+    .robots { grid-template-columns: repeat(2, 1fr); }
+    .row, .apps { grid-template-columns: 1fr; }
+    .row .shot { max-width: 320px; }
+    .shot.tall { aspect-ratio: 4 / 3; }
+  }
   footer { color: var(--muted); font-size: 0.92rem; margin-top: 36px; display: flex; flex-wrap: wrap; gap: 6px 18px; }
   footer a { color: inherit; }
   footer .tm { flex-basis: 100%; }
@@ -50,29 +71,80 @@
   and apps you choose, and you approve each one. Proofs of concept, vibe coded, not reviewed by
   humans yet.</p>
 
+  <div class="robots">
+    <figure><img src="/s/robot-pet.webp" width="300" height="330" alt="The robot running the pet: a happy orange face"><figcaption>Pet</figcaption></figure>
+    <figure><img src="/s/robot-raw.webp" width="300" height="330" alt="The robot running Raw data: its face and a speech bubble"><figcaption>Raw data</figcaption></figure>
+    <figure><img src="/s/robot-focus.webp" width="300" height="330" alt="The robot running Focus: a red ring, 17:42 left, its LEDs counting down"><figcaption>Focus</figcaption></figure>
+    <figure><img src="/s/robot-qr.webp" width="300" height="330" alt="The robot's QR screen: scan it to pair a phone"><figcaption>QR to pair</figcaption></figure>
+  </div>
+  <p class="note">The robot as drawn here, with real screens from it.</p>
+
   <div class="cards">
     <section class="card">
       <h2><a href="https://sm.w42.eu">sm.w42.eu</a><span class="tag">start here</span></h2>
-      <p>The Stackchan manager: sign in with GitHub or Google, pick the apps for your robot and
-      set it up with one click over USB (Chrome or Edge): the official firmware and a token of
-      its own for every app you approve.</p>
-      <p><a href="https://github.com/mj41/StackChan/blob/embody-mj41/firmware/main/apps/app_embody_mode/SETUP.md">Other ways to set up a robot</a>,
-      e.g. with servers of your own at home.</p>
+      <div class="row">
+        <a class="shot" href="/s/manager-page.webp"><img src="/s/manager-page.webp" width="620" height="460"
+          alt="A robot's card on the manager: connected, on Pet; open the app, switch to Raw data, its apps"></a>
+        <div>
+          <p>The Stackchan manager: sign in with GitHub or Google, pick the apps for your robot and
+          set it up with one click over USB (Chrome or Edge): the official firmware, your Wi-Fi and
+          a token of its own for every app you approve.</p>
+          <p>Then it keeps a live line to your robots: switch their app, restart them, add or
+          remove apps, see who is paired. One sign-in works for every app.</p>
+          <p><a class="more" href="https://github.com/mj41/s-w42-eu-manager#readme">Read more</a>
+          · <a href="https://github.com/mj41/StackChan/blob/embody-mj41/firmware/main/apps/app_embody_mode/SETUP.md">other ways to set up a robot</a>, e.g. with servers
+          of your own at home</p>
+        </div>
+      </div>
     </section>
 
     <section class="card">
       <h2>Apps</h2>
       <p>Each app has a host of its own under sa.w42.eu, so no app can read another's data in
-      your browser.</p>
-      <ul class="repos">
-        <li><a href="https://raw.sa.w42.eu">raw.sa.w42.eu</a>: every sensor and command. Pair a
-          phone by the QR code on the robot's screen, then see through its camera, hear it, talk
-          through it and move it.</li>
-        <li>pet.sa.w42.eu: a Tamagotchi for kids, on the robot and on a phone.
-          <span class="tag">soon</span></li>
-        <li>dev.sa.w42.eu: a higher level API for developers and AI agents.
-          <span class="tag">planned</span></li>
-      </ul>
+      your browser. On the robot, swipe up for the app switcher; on a phone, scan the robot's QR
+      code to pair.</p>
+      <div class="apps">
+        <div class="app">
+          <a class="shot tall" href="/s/raw-page.webp"><img src="/s/raw-page.webp" width="405" height="540"
+            alt="Raw data: buttons for the robot's face, what it says and its LEDs"></a>
+          <h3><a href="https://raw.sa.w42.eu">Raw data</a></h3>
+          <p>Every sensor and command: see through its camera, hear it, talk through it, move its
+          head, set its face and LEDs, read IR remotes and NFC tags. With end to end encryption
+          on, only paired browsers can read the robot: the server relays ciphertext.</p>
+          <p><a class="more" href="https://github.com/mj41/s-w42-eu-raw#readme">Read more</a></p>
+        </div>
+        <div class="app">
+          <a class="shot tall" href="/s/pet-page.webp"><img src="/s/pet-page.webp" width="390" height="844"
+            alt="The pet's page for kids: its face, food, love and sleep bars, and buttons to feed, pet, play and put to bed"></a>
+          <h3><a href="https://pet.sa.w42.eu">Pet</a></h3>
+          <p>A Tamagotchi for kids, on the robot and on a phone: feed it, pet it, play with it,
+          put it to bed, or hold an NFC card to it to feed it. It shows how it feels, and never
+          suffers while the kid sleeps or is away.</p>
+          <p><a class="more" href="https://github.com/mj41/s-w42-eu-pet#readme">Read more</a></p>
+        </div>
+        <div class="app">
+          <a class="shot tall" href="/s/focus-page.webp"><img src="/s/focus-page.webp" width="600" height="1090"
+            alt="Focus on a phone: the ring with 17:38 left, the task, today's count and the week"></a>
+          <h3><a href="https://focus.sa.w42.eu">Focus</a></h3>
+          <p>A focus timer for your desk: 25 minutes of focus, then a break. Tap the robot to
+          start or pause; it chimes, nods and dims its LEDs as time runs out. Tasks, a daily goal
+          and the week's count on your phone.</p>
+          <p><a class="more" href="https://github.com/mj41/s-w42-eu-focus#readme">Read more</a></p>
+        </div>
+      </div>
+      <p style="margin-top:14px">Planned: dev.sa.w42.eu, a higher level API for developers and AI agents.</p>
+    </section>
+
+    <section class="card">
+      <h2>How it works</h2>
+      <p>The robot connects out to one app at a time over a WebSocket; nothing connects in to
+      it. Each app gets a token for just that robot, from the manager or one you make yourself.
+      The firmware is built reproducibly: anyone can rebuild a release and get the same bytes,
+      and each release is signed.</p>
+      <p><a class="more" href="https://github.com/mj41/home-w42-eu/blob/main/docs/implementations/stackchan.md">Read more</a>
+      · <a href="https://github.com/mj41/StackChan/blob/embody-mj41/firmware/main/apps/app_embody_mode/README.md">Embody Mode</a>
+      · <a href="https://github.com/mj41/home-w42-eu/blob/main/docs/e2ee.md">end to end encryption</a>
+      · <a href="https://github.com/mj41/home-w42-eu/blob/main/docs/independent-rebuild.md">rebuild a release</a></p>
     </section>
 
     <section class="card">
@@ -84,13 +156,16 @@
           <span class="lic">MIT</span></li>
         <li><a href="https://github.com/mj41/s-w42-eu-raw">s-w42-eu-raw</a>: raw.sa.w42.eu.
           <span class="lic">MIT</span></li>
-        <li><a href="https://github.com/mj41/s-w42-eu-pet">s-w42-eu-pet</a>: the pet.
+        <li><a href="https://github.com/mj41/s-w42-eu-pet">s-w42-eu-pet</a>: pet.sa.w42.eu.
           <span class="lic">MIT</span></li>
+        <li><a href="https://github.com/mj41/s-w42-eu-focus">s-w42-eu-focus</a>: focus.sa.w42.eu.
+          <span class="lic">Apache-2.0</span></li>
         <li><a href="https://github.com/mj41/s-w42-eu-sbot">s-w42-eu-sbot</a>: a cockpit at
           home that also drives a micro:bit car. <span class="lic">Apache-2.0</span></li>
       </ul>
-      <p style="margin-top:14px">Part of <a href="https://home.w42.eu">home.w42.eu</a>, a local first, security and
-      privacy first platform for a home.</p>
+      <p style="margin-top:14px">Part of <a href="https://github.com/mj41/home-w42-eu">home-w42-eu</a>,
+      a local first, security and privacy first platform for a home; <a href="https://github.com/mj41">more
+      projects</a> on GitHub.</p>
     </section>
   </div>
 
