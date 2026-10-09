@@ -6,6 +6,7 @@ import (
 	"net/http/httptest"
 	"path"
 	"regexp"
+	"strings"
 	"testing"
 )
 
@@ -83,6 +84,33 @@ func TestExternalLinksOpenANewTab(t *testing.T) {
 			newTab := bytes.Contains(m[0], []byte(`target="_blank"`)) && bytes.Contains(m[0], []byte(`rel="noopener"`))
 			if ours.MatchString(host) == newTab {
 				t.Errorf("%s: %s: our sites stay in the tab, others open a new one (with rel=noopener)", name, tag)
+			}
+			// another site says so after the link: a chip (data-ext), unless its text says it already
+			chip := bytes.Contains(m[0], []byte(`data-ext="`))
+			if ours.MatchString(host) && chip {
+				t.Errorf("%s: %s: a chip on a link to our own site", name, tag)
+			}
+		}
+	}
+}
+
+// Every link to another site is marked after it: a chip with the site ("GitHub", "m5stack.com"),
+// unless the link's own text names it ("github.com/mj41", "infinite.pm").
+func TestExternalLinksMarked(t *testing.T) {
+	link := regexp.MustCompile(`(?s)<a\b([^>]*\bhref="https?://([^/"]+)[^"]*"[^>]*)>(.*?)</a>`)
+	ours := regexp.MustCompile(`(^|\.)(w42\.eu|mj41\.cz)$`)
+	for name, page := range map[string][]byte{"index.html": indexHTML, "s.html": sHTML, "mcbot.html": mcbotHTML} {
+		for _, m := range link.FindAllSubmatch(page, -1) {
+			attrs, host, text := string(m[1]), strings.ToLower(string(m[2])), strings.ToLower(string(m[3]))
+			if ours.MatchString(host) || strings.Contains(attrs, `data-ext="`) {
+				continue
+			}
+			site := strings.TrimPrefix(strings.TrimPrefix(host, "www."), "shop.")
+			if strings.HasSuffix(host, "github.com") {
+				site = "github"
+			}
+			if !strings.Contains(text, site) {
+				t.Errorf("%s: %q to %s has no chip and does not say where it goes", name, text, host)
 			}
 		}
 	}
