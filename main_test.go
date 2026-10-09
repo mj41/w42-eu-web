@@ -71,3 +71,19 @@ func TestImages(t *testing.T) {
 		}
 	}
 }
+
+// Links to other sites open in a new tab, so the visitor keeps this page; links to our own
+// sites (w42.eu and its subdomains, mj41.cz) stay in the tab.
+func TestExternalLinksOpenANewTab(t *testing.T) {
+	link := regexp.MustCompile(`<a\b[^>]*\bhref="https?://([^/"]+)[^"]*"[^>]*>`)
+	ours := regexp.MustCompile(`(^|\.)(w42\.eu|mj41\.cz)$`)
+	for name, page := range map[string][]byte{"index.html": indexHTML, "s.html": sHTML, "mcbot.html": mcbotHTML} {
+		for _, m := range link.FindAllSubmatch(page, -1) {
+			tag, host := string(m[0]), string(m[1])
+			newTab := bytes.Contains(m[0], []byte(`target="_blank"`)) && bytes.Contains(m[0], []byte(`rel="noopener"`))
+			if ours.MatchString(host) == newTab {
+				t.Errorf("%s: %s: our sites stay in the tab, others open a new one (with rel=noopener)", name, tag)
+			}
+		}
+	}
+}
