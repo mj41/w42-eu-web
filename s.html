@@ -21,6 +21,8 @@
   }
   main { max-width: 760px; margin: 0 auto; padding: 48px 16px 32px; }
   h1 { font-size: 2.2rem; margin: 0 0 4px; letter-spacing: -0.02em; }
+  .top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .top .up { font-size: 0.95rem; color: var(--muted); }
   .sub { color: var(--muted); margin: 0 0 32px; }
   .cards { display: grid; gap: 16px; }
   .card {
@@ -66,8 +68,8 @@
 </head>
 <body>
 <main>
-  <h1>s.w42.eu</h1>
-  <p class="sub">M5Stack Stackchan robots in Embody Mode: the robot is a light client of servers
+  <div class="top"><h1>s.w42.eu</h1><a class="up" href="https://w42.eu">w42.eu</a></div>
+  <p class="sub"><a href="https://shop.m5stack.com/products/stackchan-kawaii-co-created-open-source-ai-desktop-robot">M5Stack Stackchan robots</a> in <a href="https://github.com/mj41/StackChan/blob/embody-mj41/firmware/main/apps/app_embody_mode/README.md">Embody Mode</a>: the robot is a light client of servers
   and apps you choose, and you approve each one. Proofs of concept, vibe coded, not reviewed by
   humans yet.</p>
 
@@ -141,8 +143,7 @@
       it. Each app gets a token for just that robot, from the manager or one you make yourself.
       The firmware is built reproducibly: anyone can rebuild a release and get the same bytes,
       and each release is signed.</p>
-      <p><a class="more" href="https://github.com/mj41/home-w42-eu/blob/main/docs/implementations/stackchan.md">Read more</a>
-      · <a href="https://github.com/mj41/StackChan/blob/embody-mj41/firmware/main/apps/app_embody_mode/README.md">Embody Mode</a>
+      <p><a class="more" href="https://github.com/mj41/StackChan/blob/embody-mj41/firmware/main/apps/app_embody_mode/README.md">Read more</a>
       · <a href="https://github.com/mj41/home-w42-eu/blob/main/docs/e2ee.md">end to end encryption</a>
       · <a href="https://github.com/mj41/home-w42-eu/blob/main/docs/independent-rebuild.md">rebuild a release</a></p>
     </section>
@@ -162,10 +163,11 @@
           <span class="lic">Apache-2.0</span></li>
         <li><a href="https://github.com/mj41/s-w42-eu-sbot">s-w42-eu-sbot</a>: a cockpit at
           home that also drives a micro:bit car. <span class="lic">Apache-2.0</span></li>
+        <li><a href="https://github.com/mj41/s-w42-eu-assets">s-w42-eu-assets</a>: the 3D robot on
+          these pages, drawn in Go from M5Stack's StackChan structure files with real screens.
+          <span class="lic">Apache-2.0, M5Stack's parts MIT</span></li>
       </ul>
-      <p style="margin-top:14px">Part of <a href="https://github.com/mj41/home-w42-eu">home-w42-eu</a>,
-      a local first, security and privacy first platform for a home; <a href="https://github.com/mj41">more
-      projects</a> on GitHub.</p>
+      <p style="margin-top:14px"><a href="https://github.com/mj41">More projects</a> on GitHub.</p>
     </section>
   </div>
 
