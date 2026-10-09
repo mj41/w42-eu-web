@@ -37,7 +37,7 @@ func TestImages(t *testing.T) {
 		"/mcbot/nope.png":            404,
 		"/mcbot/../main.go":          404,
 		"/mcbot/%2e%2e%2fmain.go":    404,
-		"/s/robot3d-focus.webp":      200,
+		"/s/robot3d-focus.png":       200,
 		"/s/":                        404,
 		"/s/nope.webp":               404,
 		"/main.go":                   404,

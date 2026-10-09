@@ -1,6 +1,6 @@
 // Command w42-eu-web serves the w42.eu landing page: a list of the projects that
 // run under w42.eu, with links to mj41.cz and GitHub. It also serves s.w42.eu,
-// the Stackchan project page with its pictures (/s/*.webp), and mcbot.w42.eu,
+// the Stackchan project page with its pictures (/s/*.png, /s/*.webp), and mcbot.w42.eu,
 // the Minecraft robots' page with its screenshots (/mcbot/*.png). The pages are
 // embedded and chosen by the request's host.
 package main
@@ -29,7 +29,7 @@ var mcbotHTML []byte
 // images are the pages' pictures, served at /<dir>/<name>: mcbot.html's
 // screenshots and s.html's robots and screenshots.
 //
-//go:embed mcbot/*.png s/*.webp
+//go:embed mcbot/*.png s/*.png s/*.webp
 var images embed.FS
 
 // imageDirs are the directories in images.

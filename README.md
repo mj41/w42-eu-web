@@ -5,16 +5,18 @@ The [w42.eu](https://w42.eu) landing page: the projects under w42.eu
 with links to [mj41.cz](https://mj41.cz) and [GitHub](https://github.com/mj41) for more projects.
 
 It also serves [s.w42.eu](https://s.w42.eu), the Stackchan project page (the robots' manager at
-sm.w42.eu, their apps under sa.w42.eu, with the robot and screenshots of the apps: `s/*.webp`),
+sm.w42.eu, their apps under sa.w42.eu, with the robot (`s/robot3d-*.png`) and screenshots of the apps
+(`s/*.webp`)),
 and [mcbot.w42.eu](https://mcbot.w42.eu), the Minecraft robots' page, with a screenshot of their
 dashboard (`mcbot/*.png`: small in the page, the full size on click, by CSS alone).
 
-The robot pictures in `s/` are 3D renders of the robot (M5Stack's StackChan structure files, MIT,
-and photos of it) with real screens from the robot.
+The robot pictures `s/robot3d-*.png` are 3D renders of the robot (M5Stack's StackChan structure
+files, MIT, and photos of it) with real screens from the robot, written by `robot3d-distribute` in
+s-w42-eu-assets: change them there, not here.
 
 One Go binary with the pages embedded (`index.html`, `s.html`, `mcbot.html` and their images), no
 dependencies. The request's host picks the page: `s.w42.eu` gets `s.html`, `mcbot.w42.eu`
-`mcbot.html`, any other host `index.html`; `/mcbot/<name>.png` and `/s/<name>.webp` serve the
+`mcbot.html`, any other host `index.html`; `/mcbot/<name>.png` and `/s/<name>.png|webp` serve the
 images on any host.
 
 ```bash
