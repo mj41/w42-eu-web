@@ -9,7 +9,8 @@ sm.w42.eu, their apps under sa.w42.eu, with the robot and screenshots of the app
 and [mcbot.w42.eu](https://mcbot.w42.eu), the Minecraft robots' page, with a screenshot of their
 dashboard (`mcbot/*.png`: small in the page, the full size on click, by CSS alone).
 
-The robot pictures in `s/` are drawings of a Stackchan with real screens from the robot.
+The robot pictures in `s/` are 3D renders of the robot (M5Stack's StackChan structure files, MIT,
+and photos of it) with real screens from the robot.
 
 One Go binary with the pages embedded (`index.html`, `s.html`, `mcbot.html` and their images), no
 dependencies. The request's host picks the page: `s.w42.eu` gets `s.html`, `mcbot.w42.eu`
