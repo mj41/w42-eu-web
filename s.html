@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>s.w42.eu</title>
+<title>Apps for the Stackchan robot · s.w42.eu</title>
 <meta name="description" content="Stackchan robots on w42.eu: set up your robot with the manager, then use the apps you approve for it. By mj41.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%235b6cff'/%3E%3Ctext x='32' y='43' font-family='sans-serif' font-size='28' font-weight='700' text-anchor='middle' fill='white'%3Ew42%3C/text%3E%3C/svg%3E">
 <style>
@@ -21,7 +21,8 @@
   }
   main { max-width: 760px; margin: 0 auto; padding: 48px 16px 32px; }
   h1 { font-size: 2.2rem; margin: 0 0 4px; letter-spacing: -0.02em; }
-  .top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin: 0 0 6px; }
+  .top .site { font-weight: 700; color: var(--muted); }
   .top .up { font-size: 0.95rem; color: var(--muted); }
   .sub { color: var(--muted); margin: 0 0 32px; }
   .cards { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
@@ -52,10 +53,12 @@
   .robots figure { margin: 0; text-align: center; }
   .robots img { width: 100%; height: auto; display: block; }
   .robots figcaption { color: var(--muted); font-size: 0.85rem; }
-  .note { color: var(--muted); font-size: 0.8rem; text-align: center; margin: 0 0 24px; }
+  .note { color: var(--muted); font-size: 0.8rem; text-align: center; margin: 0 0 18px; }
+  .need { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px 16px; margin: 0 0 16px; }
   .row { display: grid; grid-template-columns: 220px 1fr; gap: 18px; align-items: start; }
   .apps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
   .app { scroll-margin-top: 16px; border-radius: 12px; }
+  .swipe { display: none; }
   .app:target { outline: 2px solid var(--accent); outline-offset: 8px; }
   .app h3 { margin: 8px 0 4px; font-size: 1.05rem; }
   .app p { font-size: 0.95rem; }
@@ -74,6 +77,8 @@
       padding: 0 2px 10px; margin: 0 -2px;
     }
     .app { scroll-snap-align: start; }
+    .swipe { display: block; color: var(--muted); font-size: 0.92rem; }
+    .swipe a { display: inline-block; padding: 4px 2px; font-weight: 600; }
     .app:target { outline-offset: 2px; }
     .row .shot { max-width: 320px; }
   }
@@ -84,10 +89,12 @@
 </head>
 <body>
 <main>
-  <div class="top"><h1>s.w42.eu</h1><a class="up" href="https://w42.eu">w42.eu</a></div>
-  <p class="sub"><a href="https://shop.m5stack.com/products/stackchan-kawaii-co-created-open-source-ai-desktop-robot" target="_blank" rel="noopener" data-ext="m5stack.com">M5Stack Stackchan robots</a> in <a href="https://github.com/mj41/StackChan/blob/embody-mj41/firmware/main/apps/app_embody_mode/README.md" target="_blank" rel="noopener" data-ext="GitHub">Embody Mode</a>: the robot is a light client of servers
-  and apps you choose, and you approve each one. Proofs of concept, vibe coded, not reviewed by
-  humans yet.</p>
+  <div class="top"><span class="site">s.w42.eu</span><a class="up" href="https://w42.eu">w42.eu</a></div>
+  <h1>Apps for your Stackchan robot</h1>
+  <p class="sub">A pet for kids, a focus timer for your desk, and a dashboard of every sensor for
+  the curious: apps for <a href="https://shop.m5stack.com/products/stackchan-kawaii-co-created-open-source-ai-desktop-robot" target="_blank" rel="noopener" data-ext="m5stack.com">M5Stack's Stackchan robot</a>.
+  You pick the apps your robot gets and approve each one. Proofs of concept, vibe coded, not
+  reviewed by humans yet.</p>
 
   <div class="robots">
     <a href="#pet"><figure><img src="/s/robot3d-pet.png" width="400" height="400" alt="The robot running the pet: a happy orange face"><figcaption>Pet</figcaption></figure></a>
@@ -98,21 +105,24 @@
   <p class="note">The robot rendered in 3D from M5Stack's StackChan structure files, with real screens from it.
   <a href="https://s3d.w42.eu">Turn it round and see its sensors on s3d.w42.eu</a>.</p>
 
+  <p class="need"><b>What you need:</b> the robot from M5Stack, a computer with Chrome or Edge,
+  a USB-C cable and 2.4 GHz Wi-Fi.</p>
+
   <div class="cards">
-    <section class="card">
+    <section class="card" id="manager">
       <h2><a href="https://sm.w42.eu">sm.w42.eu</a><span class="tag">start here</span></h2>
       <div class="row">
         <a class="shot" href="/s/manager-page.webp"><img src="/s/manager-page.webp" width="620" height="460"
           alt="A robot's card on the manager: connected, on Pet; open the app, switch to Raw data, its apps"></a>
         <div>
-          <p>The Stackchan manager: sign in with GitHub or Google, pick the apps for your robot and
-          set it up with one click over USB (Chrome or Edge): the official firmware, your Wi-Fi and
-          a token of its own for every app you approve.</p>
+          <p>The Stackchan manager online: sign in with GitHub or Google, pick the apps for your
+          robot and set it up with one click over USB (Chrome or Edge): the official firmware, your
+          Wi-Fi and a token of its own for every app you approve.</p>
           <p>Then it keeps a live line to your robots: switch their app, restart them, add or
           remove apps, see who is paired. One sign-in works for every app.</p>
-          <p><a class="more" href="https://github.com/mj41/s-w42-eu-manager#readme" target="_blank" rel="noopener" data-ext="GitHub">Read more</a>
-          · <a href="https://github.com/mj41/StackChan/blob/embody-mj41/firmware/main/apps/app_embody_mode/SETUP.md" target="_blank" rel="noopener" data-ext="GitHub">other ways to set up a robot</a>, e.g. with servers
-          of your own at home</p>
+          <p>Rather keep it at home? The same manager runs on a computer of your own, with no
+          sign-in and no cloud: <a href="https://github.com/mj41/s-w42-eu-manager#readme" target="_blank" rel="noopener" data-ext="GitHub">the home manager</a>.
+          All the ways to set up a robot: <a href="https://github.com/mj41/StackChan/blob/embody-mj41/firmware/main/apps/app_embody_mode/SETUP.md" target="_blank" rel="noopener" data-ext="GitHub">SETUP</a>.</p>
         </div>
       </div>
     </section>
@@ -122,6 +132,7 @@
       <p>Each app has a host of its own under sa.w42.eu, so no app can read another's data in
       your browser. On the robot, swipe up for the app switcher; on a phone, scan the robot's QR
       code to pair.</p>
+      <p class="swipe">Swipe sideways for all three: <a href="#pet">Pet</a> · <a href="#raw">Raw data</a> · <a href="#focus">Focus</a></p>
       <div class="apps">
         <div class="app" id="pet">
           <a class="shot tall" href="/s/pet-page.webp"><img src="/s/pet-page.webp" width="390" height="844"
@@ -156,7 +167,9 @@
 
     <section class="card">
       <h2>How it works</h2>
-      <p>The robot connects out to one app at a time over a WebSocket; nothing connects in to
+      <p>The robot runs <a href="https://github.com/mj41/StackChan/blob/embody-mj41/firmware/main/apps/app_embody_mode/README.md" target="_blank" rel="noopener" data-ext="GitHub">Embody Mode</a>,
+      an app in its firmware that makes it a light client: it connects out to one app at a time
+      over a WebSocket; nothing connects in to
       it. Each app gets a token for just that robot, from the manager or one you make yourself.
       The firmware is built reproducibly: anyone can rebuild a release and get the same bytes,
       and each release is signed.</p>
@@ -170,8 +183,8 @@
       <ul class="repos">
         <li><a href="https://github.com/mj41/StackChan/tree/embody-mj41" target="_blank" rel="noopener" data-ext="GitHub">StackChan firmware, Embody Mode</a>:
           the robot side, reproducible and signed releases. <span class="lic">MIT</span></li>
-        <li><a href="https://github.com/mj41/s-w42-eu-manager" target="_blank" rel="noopener" data-ext="GitHub">s-w42-eu-manager</a>: the home manager,
-          without the cloud (being split out of sm.w42.eu's manager now). <span class="lic">MIT</span></li>
+        <li><a href="https://github.com/mj41/s-w42-eu-manager" target="_blank" rel="noopener" data-ext="GitHub">s-w42-eu-manager</a>: the home manager:
+          the manager on a computer at home, no sign-in and no cloud. <span class="lic">MIT</span></li>
         <li><a href="https://github.com/mj41/s-w42-eu-raw" target="_blank" rel="noopener" data-ext="GitHub">s-w42-eu-raw</a>: raw.sa.w42.eu.
           <span class="lic">MIT</span></li>
         <li><a href="https://github.com/mj41/s-w42-eu-pet" target="_blank" rel="noopener" data-ext="GitHub">s-w42-eu-pet</a>: pet.sa.w42.eu.

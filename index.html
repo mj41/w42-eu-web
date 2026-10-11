@@ -32,6 +32,7 @@
   .card h2 a:hover { color: var(--accent); }
   .card p { margin: 0 0 10px; }
   .links { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.92rem; }
+  .links a { display: inline-flex; align-items: center; min-height: 24px; }
   a { color: var(--accent); }
   a[data-ext]::after {
     content: attr(data-ext); display: inline-block; margin-left: 0.35em; padding: 0 0.45em;
@@ -66,13 +67,12 @@
         <img src="/s/robot3d-focus.png" width="400" height="400" alt="A Stackchan robot running Focus: a red ring and 17:42 left, its LEDs counting down">
         <img src="/s/robot3d-qr.png" width="400" height="400" alt="A Stackchan robot showing the QR code a phone scans to pair with it">
       </div>
-      <p><a href="https://shop.m5stack.com/products/stackchan-kawaii-co-created-open-source-ai-desktop-robot" target="_blank" rel="noopener" data-ext="m5stack.com">M5Stack Stackchan robots</a> in <a href="https://github.com/mj41/StackChan/blob/embody-mj41/firmware/main/apps/app_embody_mode/README.md" target="_blank" rel="noopener" data-ext="GitHub">Embody Mode</a>: the
-      robot is a light client of apps you choose and approve. Set it up on
-      <a href="https://sm.w42.eu">sm.w42.eu</a> with one click over USB, pair a phone by the QR code
-      on its screen, and switch between the apps on the robot:
-      <a href="https://raw.sa.w42.eu">every sensor, its camera and microphone</a> (end to end
-      encrypted), <a href="https://pet.sa.w42.eu">a pet for kids</a>,
-      <a href="https://focus.sa.w42.eu">a focus timer for your desk</a>.</p>
+      <p>Apps for <a href="https://shop.m5stack.com/products/stackchan-kawaii-co-created-open-source-ai-desktop-robot" target="_blank" rel="noopener" data-ext="m5stack.com">M5Stack's Stackchan robot</a>:
+      <a href="https://s.w42.eu/pet">a pet for kids</a>, <a href="https://s.w42.eu/focus">a focus
+      timer for your desk</a> and <a href="https://s.w42.eu/raw">a dashboard of every sensor</a>
+      (its camera and microphone end to end encrypted). You approve each app for your robot. Set
+      it up on <a href="https://sm.w42.eu">sm.w42.eu</a> with one click over USB and pair a phone
+      by the QR code on its screen.</p>
       <div class="links">
         <a class="more" href="https://s.w42.eu">Read more</a>
         <a href="https://sm.w42.eu">set up a robot</a>
@@ -82,7 +82,7 @@
 
     <section class="card">
       <h2><a href="https://mcbot.w42.eu">mcbot.w42.eu</a><span class="tag">proof of concept</span></h2>
-      <a class="shot" href="https://mcbot.w42.eu"><img src="/mcbot/dashboard-small.png" width="640" height="360"
+      <a class="shot" href="https://mcbot.w42.eu"><img src="/mcbot/dashboard-small.webp" width="640" height="360"
         alt="The mcbot dashboard during a run: maps of the land, a 3D view of the robot's shelter and its log"></a>
       <p>Minecraft robots that play vanilla survival on their own: wood, tools, a shelter before
       the night, food, iron, a wheat field by the water. The goal is a robot that lives through a

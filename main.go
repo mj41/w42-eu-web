@@ -32,7 +32,7 @@ var mcbotHTML []byte
 // images are the pages' pictures, served at /<dir>/<name>: mcbot.html's
 // screenshots and s.html's robots and screenshots.
 //
-//go:embed mcbot/*.png s/*.png s/*.webp
+//go:embed mcbot/*.png mcbot/*.webp s/*.png s/*.webp
 var images embed.FS
 
 // imageDirs are the directories in images.

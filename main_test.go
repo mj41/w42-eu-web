@@ -33,7 +33,7 @@ func TestImages(t *testing.T) {
 	defer srv.Close()
 	for p, want := range map[string]int{
 		"/mcbot/dashboard.png":       200,
-		"/mcbot/dashboard-small.png": 200,
+		"/mcbot/dashboard-small.webp": 200,
 		"/mcbot/":                    404,
 		"/mcbot/nope.png":            404,
 		"/mcbot/../main.go":          404,
