@@ -46,12 +46,14 @@
   }
   .robots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0 12px; }
   .robots img { width: 100%; height: auto; display: block; }
+  .credit { color: var(--muted); font-size: 0.8rem; text-align: center; margin: -6px 0 12px; }
   .shot { display: block; margin: 10px 0 12px; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
   .shot img { display: block; width: 100%; height: auto; }
   .more { font-weight: 600; }
   .more::after { content: " \2192"; }
   footer { color: var(--muted); font-size: 0.92rem; margin-top: 36px; display: flex; flex-wrap: wrap; gap: 6px 18px; }
   footer a { color: inherit; }
+  footer .tm { flex-basis: 100%; }
 </style>
 </head>
 <body>
@@ -67,6 +69,7 @@
         <img src="/s/robot3d-focus.png" width="400" height="400" alt="A Stackchan robot running Focus: a red ring and 17:42 left, its LEDs counting down">
         <img src="/s/robot3d-qr.png" width="400" height="400" alt="A Stackchan robot showing the QR code a phone scans to pair with it">
       </div>
+      <p class="credit">Rendered in 3D from M5Stack's StackChan structure files (MIT), with real screens from the robot.</p>
       <p>Apps for <a href="https://shop.m5stack.com/products/stackchan-kawaii-co-created-open-source-ai-desktop-robot" target="_blank" rel="noopener" data-ext="m5stack.com">M5Stack's Stackchan robot</a>:
       <a href="https://s.w42.eu/pet">a pet for kids</a>, <a href="https://s.w42.eu/focus">a focus
       timer for your desk</a> and <a href="https://s.w42.eu/raw">a dashboard of every sensor</a>
@@ -119,6 +122,8 @@
   </div>
 
   <footer>
+    <span class="tm">Stack-chan (スタックチャン) is a registered trademark of Shinya Ishikawa; this project is
+    independent and only made to work with <a href="https://github.com/stack-chan/stack-chan" target="_blank" rel="noopener" data-ext="GitHub">Stack-chan</a> robots.</span>
     <a href="https://mj41.cz">mj41.cz</a>
     <a href="https://github.com/mj41" target="_blank" rel="noopener">github.com/mj41</a>
     <a href="https://github.com/sponsors/mj41" target="_blank" rel="noopener" data-ext="GitHub">sponsor mj41</a>
