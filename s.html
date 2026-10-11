@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Apps for the Stackchan robot · s.w42.eu</title>
+<title>Apps for your Stackchan robot · s.w42.eu</title>
 <meta name="description" content="Stackchan robots on w42.eu: set up your robot with the manager, then use the apps you approve for it. By mj41.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%235b6cff'/%3E%3Ctext x='32' y='43' font-family='sans-serif' font-size='28' font-weight='700' text-anchor='middle' fill='white'%3Ew42%3C/text%3E%3C/svg%3E">
 <style>
@@ -78,7 +78,7 @@
     }
     .app { scroll-snap-align: start; }
     .swipe { display: block; color: var(--muted); font-size: 0.92rem; }
-    .swipe a { display: inline-block; padding: 4px 2px; font-weight: 600; }
+    .swipe a { display: inline-flex; align-items: center; min-height: 24px; padding: 0 2px; font-weight: 600; }
     .app:target { outline-offset: 2px; }
     .row .shot { max-width: 320px; }
   }
@@ -102,7 +102,7 @@
     <a href="#focus"><figure><img src="/s/robot3d-focus.png" width="400" height="400" alt="The robot running Focus: a red ring, 17:42 left, its LEDs counting down"><figcaption>Focus</figcaption></figure></a>
     <a href="#apps"><figure><img src="/s/robot3d-qr.png" width="400" height="400" alt="The robot's QR screen: scan it to pair a phone"><figcaption>QR to pair</figcaption></figure></a>
   </div>
-  <p class="note">The robot rendered in 3D from M5Stack's StackChan structure files, with real screens from it.
+  <p class="note">The robot rendered in 3D from M5Stack's StackChan structure files (MIT), with real screens from it.
   <a href="https://s3d.w42.eu">Turn it round and see its sensors on s3d.w42.eu</a>.</p>
 
   <p class="need"><b>What you need:</b> the robot from M5Stack, a computer with Chrome or Edge,
@@ -205,8 +205,8 @@
   </div>
 
   <footer>
-    <span class="tm">Stack-chan is a registered trademark of Shinya Ishikawa; these projects are
-    independent of it.</span>
+    <span class="tm">Stack-chan (スタックチャン) is a registered trademark of Shinya Ishikawa; this project is
+    independent and only made to work with <a href="https://github.com/stack-chan/stack-chan" target="_blank" rel="noopener" data-ext="GitHub">Stack-chan</a> robots.</span>
     <a href="https://w42.eu">w42.eu</a>
     <a href="https://mj41.cz">mj41.cz</a>
     <a href="https://github.com/mj41" target="_blank" rel="noopener">github.com/mj41</a>

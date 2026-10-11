@@ -32,3 +32,6 @@ A `v*` tag builds `ghcr.io/mj41/w42-eu-web:<tag>`.
 ## License
 
 Apache License 2.0, see [LICENSE](LICENSE).
+
+Stack-chan (スタックチャン) is a registered trademark of Shinya Ishikawa; this project is
+independent and only made to work with [Stack-chan](https://github.com/stack-chan/stack-chan) robots.
