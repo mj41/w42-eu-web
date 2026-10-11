@@ -66,9 +66,11 @@ func TestImages(t *testing.T) {
 			}
 		}
 	}
-	for _, m := range regexp.MustCompile(`"/(s|mcbot)/([^"]+)"`).FindAllSubmatch(append(append([]byte{}, sHTML...), append(mcbotHTML, indexHTML...)...), -1) {
-		if _, err := images.ReadFile(string(m[1]) + "/" + string(m[2])); err != nil {
-			t.Errorf("a page names a missing image: /%s/%s", m[1], m[2])
+	for name, page := range allPages() {
+		for _, m := range regexp.MustCompile(`"/(s|mcbot)/([^"]+)"`).FindAllSubmatch(page, -1) {
+			if _, err := images.ReadFile(string(m[1]) + "/" + string(m[2])); err != nil {
+				t.Errorf("%s names a missing image: /%s/%s", name, m[1], m[2])
+			}
 		}
 	}
 }
@@ -78,7 +80,7 @@ func TestImages(t *testing.T) {
 func TestExternalLinksOpenANewTab(t *testing.T) {
 	link := regexp.MustCompile(`<a\b[^>]*\bhref="https?://([^/"]+)[^"]*"[^>]*>`)
 	ours := regexp.MustCompile(`(^|\.)(w42\.eu|mj41\.cz)$`)
-	for name, page := range map[string][]byte{"index.html": indexHTML, "s.html": sHTML, "mcbot.html": mcbotHTML} {
+	for name, page := range allPages() {
 		for _, m := range link.FindAllSubmatch(page, -1) {
 			tag, host := string(m[0]), string(m[1])
 			newTab := bytes.Contains(m[0], []byte(`target="_blank"`)) && bytes.Contains(m[0], []byte(`rel="noopener"`))
@@ -99,7 +101,7 @@ func TestExternalLinksOpenANewTab(t *testing.T) {
 func TestExternalLinksMarked(t *testing.T) {
 	link := regexp.MustCompile(`(?s)<a\b([^>]*\bhref="https?://([^/"]+)[^"]*"[^>]*)>(.*?)</a>`)
 	ours := regexp.MustCompile(`(^|\.)(w42\.eu|mj41\.cz)$`)
-	for name, page := range map[string][]byte{"index.html": indexHTML, "s.html": sHTML, "mcbot.html": mcbotHTML} {
+	for name, page := range allPages() {
 		for _, m := range link.FindAllSubmatch(page, -1) {
 			attrs, host, text := string(m[1]), strings.ToLower(string(m[2])), strings.ToLower(string(m[3]))
 			if ours.MatchString(host) || strings.Contains(attrs, `data-ext="`) {
@@ -112,6 +114,68 @@ func TestExternalLinksMarked(t *testing.T) {
 			if !strings.Contains(text, site) {
 				t.Errorf("%s: %q to %s has no chip and does not say where it goes", name, text, host)
 			}
+		}
+	}
+}
+
+// allPages are every page served, by name.
+func allPages() map[string][]byte {
+	pages := map[string][]byte{"index.html": indexHTML, "s.html": sHTML, "mcbot.html": mcbotHTML}
+	for id, p := range appPages {
+		pages["apps/"+id+".html"] = p
+	}
+	return pages
+}
+
+// Each app has a page on s.w42.eu only, and s.html's robots link to the apps' anchors, where
+// each app links to its page.
+func TestAppPages(t *testing.T) {
+	srv := httptest.NewServer(handler())
+	defer srv.Close()
+	get := func(host, p string) (int, string) {
+		req, _ := http.NewRequest("GET", srv.URL+p, nil)
+		req.Host = host
+		res, err := http.DefaultClient.Do(req)
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer res.Body.Close()
+		var b bytes.Buffer
+		b.ReadFrom(res.Body)
+		return res.StatusCode, b.String()
+	}
+	for _, a := range apps {
+		code, body := get("s.w42.eu", "/"+a.ID)
+		if code != 200 || !strings.Contains(body, "<h1>"+a.Name+"</h1>") || !strings.Contains(body, `href="https://s3d.w42.eu/#`+a.ID+`"`) {
+			t.Errorf("s.w42.eu/%s: %d, not its page", a.ID, code)
+		}
+		if !strings.Contains(body, `href="/`+a.ID+`" aria-current="page"`) {
+			t.Errorf("s.w42.eu/%s: the app switcher does not mark it", a.ID)
+		}
+		if code, _ := get("w42.eu", "/"+a.ID); code != 404 {
+			t.Errorf("w42.eu/%s: %d, want 404", a.ID, code)
+		}
+		s := string(sHTML)
+		for _, want := range []string{`<a href="#` + a.ID + `">`, `id="` + a.ID + `"`, `<h3><a href="/` + a.ID + `">`} {
+			if !strings.Contains(s, want) {
+				t.Errorf("s.html: no %s", want)
+			}
+		}
+	}
+	if code, _ := get("s.w42.eu", "/nope"); code != 404 {
+		t.Errorf("s.w42.eu/nope: %d, want 404", code)
+	}
+	if code, body := get("s.w42.eu", "/healthz"); code != 200 || body != "ok\n" {
+		t.Errorf("/healthz: %d %q", code, body)
+	}
+	// the robots and the apps in the same order
+	s := string(sHTML)
+	last := 0
+	for _, a := range apps {
+		if i := strings.Index(s, `id="`+a.ID+`"`); i < last {
+			t.Errorf("s.html: %s out of order", a.ID)
+		} else {
+			last = i
 		}
 	}
 }

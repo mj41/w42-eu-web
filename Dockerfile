@@ -6,6 +6,7 @@ COPY go.mod ./
 COPY main.go *.html ./
 COPY mcbot ./mcbot
 COPY s ./s
+COPY apps ./apps
 RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-s -w" -o /out/w42-eu-web .
 
 FROM gcr.io/distroless/static-debian12:nonroot

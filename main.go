@@ -1,13 +1,16 @@
 // Command w42-eu-web serves the w42.eu landing page: a list of the projects that
 // run under w42.eu, with links to mj41.cz and GitHub. It also serves s.w42.eu,
-// the Stackchan project page with its pictures (/s/*.png, /s/*.webp), and mcbot.w42.eu,
+// the Stackchan project page with its pictures (/s/*.png, /s/*.webp) and a page per
+// app (s.w42.eu/<app>), and mcbot.w42.eu,
 // the Minecraft robots' page with its screenshots (/mcbot/*.png). The pages are
 // embedded and chosen by the request's host.
 package main
 
 import (
+	"bytes"
 	"embed"
 	"flag"
+	"html/template"
 	"log/slog"
 	"net"
 	"net/http"
@@ -38,6 +41,34 @@ var imageDirs = map[string]bool{"mcbot": true, "s": true}
 // imageTypes are the images' content types by extension.
 var imageTypes = map[string]string{".png": "image/png", ".webp": "image/webp"}
 
+//go:embed app.html apps/*.html
+var appFiles embed.FS
+
+// app is one of s.w42.eu's apps: its page s.w42.eu/<ID> is app.html around apps/<ID>.html.
+type app struct{ ID, Name string }
+
+// apps are in the order of s.html's robots and apps.
+var apps = []app{{"pet", "Pet"}, {"raw", "Raw data"}, {"focus", "Focus"}}
+
+// appPages are the apps' pages by ID.
+var appPages = renderApps()
+
+func renderApps() map[string][]byte {
+	pages := map[string][]byte{}
+	for _, a := range apps {
+		t := template.Must(template.ParseFS(appFiles, "app.html", "apps/"+a.ID+".html"))
+		var b bytes.Buffer
+		if err := t.Execute(&b, struct {
+			app
+			Apps []app
+		}{a, apps}); err != nil {
+			panic(err)
+		}
+		pages[a.ID] = b.Bytes()
+	}
+	return pages
+}
+
 // pages maps a host to its page; any other host gets the w42.eu page.
 var pages = map[string][]byte{
 	"s.w42.eu":     sHTML,
@@ -54,16 +85,29 @@ func page(host string) []byte {
 	return indexHTML
 }
 
+func writePage(w http.ResponseWriter, p []byte) {
+	h := w.Header()
+	h.Set("Content-Type", "text/html; charset=utf-8")
+	h.Set("Cache-Control", "public, max-age=300")
+	h.Set("Content-Security-Policy", "default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'")
+	h.Set("X-Content-Type-Options", "nosniff")
+	h.Set("Referrer-Policy", "strict-origin-when-cross-origin")
+	w.Write(p)
+}
+
 func handler() http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
-		h := w.Header()
-		h.Set("Content-Type", "text/html; charset=utf-8")
-		h.Set("Cache-Control", "public, max-age=300")
-		h.Set("Content-Security-Policy", "default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'")
-		h.Set("X-Content-Type-Options", "nosniff")
-		h.Set("Referrer-Policy", "strict-origin-when-cross-origin")
-		w.Write(page(r.Host))
+		writePage(w, page(r.Host))
+	})
+	// an app's page, on s.w42.eu only
+	mux.HandleFunc("GET /{app}", func(w http.ResponseWriter, r *http.Request) {
+		p, ok := appPages[r.PathValue("app")]
+		if !ok || !bytes.Equal(page(r.Host), sHTML) {
+			http.NotFound(w, r)
+			return
+		}
+		writePage(w, p)
 	})
 	// one file by name: no listing, and {dir} and {name} cannot hold a "/"
 	mux.HandleFunc("GET /{dir}/{name}", func(w http.ResponseWriter, r *http.Request) {
