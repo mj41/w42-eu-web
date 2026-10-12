@@ -1,5 +1,5 @@
 // Command w42-eu-web serves the w42.eu landing page: a list of the projects that
-// run under w42.eu, with links to mj41.cz and GitHub. It also serves s.i41.eu (and its old name s.w42.eu),
+// run under w42.eu, with links to mj41.cz and GitHub. It also serves s.i41.eu,
 // the Stackchan project page with its pictures (/s/*.png, /s/*.webp) and a page per
 // app (s.i41.eu/<app>), and mcbot.w42.eu,
 // the Minecraft robots' page with its screenshots (/mcbot/*.png). The pages are
@@ -72,7 +72,6 @@ func renderApps() map[string][]byte {
 // pages maps a host to its page; any other host gets the w42.eu page.
 var pages = map[string][]byte{
 	"s.i41.eu":     sHTML,
-	"s.w42.eu":     sHTML, // its old name, until it redirects to s.i41.eu
 	"mcbot.w42.eu": mcbotHTML,
 }
 
@@ -101,7 +100,7 @@ func handler() http.Handler {
 	mux.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
 		writePage(w, page(r.Host))
 	})
-	// an app's page, on s.i41.eu (and s.w42.eu) only
+	// an app's page, on s.i41.eu only
 	mux.HandleFunc("GET /{app}", func(w http.ResponseWriter, r *http.Request) {
 		p, ok := appPages[r.PathValue("app")]
 		if !ok || !bytes.Equal(page(r.Host), sHTML) {

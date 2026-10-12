@@ -15,9 +15,9 @@ func TestPage(t *testing.T) {
 		"w42.eu":           indexHTML,
 		"localhost:8080":   indexHTML,
 		"home.w42.eu":      indexHTML,
-		"S.w42.eu:443":     sHTML,
-		"s.w42.eu.evil":    indexHTML,
-		"s.w42.eu":         sHTML,
+		"S.w42.eu:443":     indexHTML,
+		"s.i41.eu.evil":    indexHTML,
+		"s.w42.eu":         indexHTML, // its old name: no Stackchan page there any more
 		"s.i41.eu":         sHTML,
 		"S.i41.eu:443":     sHTML,
 		"i41.eu":           indexHTML,
@@ -132,7 +132,7 @@ func allPages() map[string][]byte {
 	return pages
 }
 
-// Each app has a page on s.i41.eu (and its old name s.w42.eu) only, and s.html's robots link to the apps' anchors, where
+// Each app has a page on s.i41.eu only, and s.html's robots link to the apps' anchors, where
 // each app links to its page.
 func TestAppPages(t *testing.T) {
 	srv := httptest.NewServer(handler())
@@ -150,7 +150,7 @@ func TestAppPages(t *testing.T) {
 		return res.StatusCode, b.String()
 	}
 	for _, a := range apps {
-		for _, host := range []string{"s.i41.eu", "s.w42.eu"} { // s.w42.eu: the old name, until it redirects
+		for _, host := range []string{"s.i41.eu"} {
 			code, body := get(host, "/"+a.ID)
 			if code != 200 || !strings.Contains(body, "<h1>"+a.Name+"</h1>") {
 				t.Errorf("%s/%s: %d, not its page", host, a.ID, code)
@@ -176,10 +176,10 @@ func TestAppPages(t *testing.T) {
 			}
 		}
 	}
-	if code, _ := get("s.w42.eu", "/nope"); code != 404 {
-		t.Errorf("s.w42.eu/nope: %d, want 404", code)
+	if code, _ := get("s.i41.eu", "/nope"); code != 404 {
+		t.Errorf("s.i41.eu/nope: %d, want 404", code)
 	}
-	if code, body := get("s.w42.eu", "/healthz"); code != 200 || body != "ok\n" {
+	if code, body := get("s.i41.eu", "/healthz"); code != 200 || body != "ok\n" {
 		t.Errorf("/healthz: %d %q", code, body)
 	}
 	// the robots and the apps in the same order
