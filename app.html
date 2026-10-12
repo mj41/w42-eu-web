@@ -36,7 +36,7 @@
     font-weight: 600; text-decoration: none;
   }
   .btn.main { background: var(--accent); color: var(--on-accent); }
-  .hero { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: center; margin: 0 0 24px; }
+  .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: center; margin: 0 0 24px; }
   .hero figure { margin: 0; }
   .hero img { display: block; width: 100%; height: auto; }
   .shot { display: block; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; cursor: zoom-in; max-height: 420px; }
@@ -55,6 +55,19 @@
   .parts li { margin: 0; font-size: 0.95rem; }
   .parts a { display: block; font-weight: 600; }
   .note { color: var(--muted); font-size: 0.9rem; }
+  .what { margin: 0; padding-left: 1.2em; }
+  .what li { margin: 0 0 10px; }
+  code { font: 0.88em ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: var(--bg); border: 1px solid var(--line); border-radius: 5px; padding: 0 4px; }
+  pre {
+    margin: 0 0 10px; padding: 12px 14px; overflow-x: auto; background: var(--bg); border: 1px solid var(--line);
+    border-radius: 10px; font: 0.82rem/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space: pre;
+  }
+  pre code { border: 0; padding: 0; background: none; font: inherit; }
+  .tag {
+    display: inline-block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 400;
+    color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 1px 9px;
+    margin-left: 10px; vertical-align: middle;
+  }
   a { color: var(--accent); }
   a[data-ext]::after {
     content: attr(data-ext); display: inline-block; margin-left: 0.35em; padding: 0 0.45em;
@@ -65,7 +78,7 @@
   .more { font-weight: 600; }
   .more::after { content: " \2192"; }
   @media (max-width: 640px) {
-    .hero, .parts { grid-template-columns: 1fr; }
+    .hero, .parts { grid-template-columns: minmax(0, 1fr); }
     .hero figure { max-width: 360px; margin: 0 auto; }
   }
   footer { color: var(--muted); font-size: 0.92rem; margin-top: 36px; display: flex; flex-wrap: wrap; gap: 6px 18px; }

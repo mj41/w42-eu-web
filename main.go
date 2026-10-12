@@ -47,8 +47,8 @@ var appFiles embed.FS
 // app is one of s.w42.eu's apps: its page s.w42.eu/<ID> is app.html around apps/<ID>.html.
 type app struct{ ID, Name string }
 
-// apps are in the order of s.html's robots and apps.
-var apps = []app{{"pet", "Pet"}, {"raw", "Raw data"}, {"focus", "Focus"}}
+// apps are in the order of s.html's apps: the apps, then the apps for developers.
+var apps = []app{{"pet", "Pet"}, {"focus", "Focus"}, {"raw", "Raw data"}, {"dev", "Dev"}}
 
 // appPages are the apps' pages by ID.
 var appPages = renderApps()

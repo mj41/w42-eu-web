@@ -66,6 +66,8 @@
   .app h3 { margin: 0 0 4px; font-size: 1.15rem; }
   .app p { font-size: 0.95rem; }
   .app p:last-child { margin-bottom: 0; }
+  .app h3 .tag { font-size: 0.65rem; }
+  code { font: 0.88em ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: var(--bg); border: 1px solid var(--line); border-radius: 5px; padding: 0 4px; }
   .shot { display: block; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; cursor: zoom-in; }
   .shot img { display: block; width: 100%; height: auto; }
   .shot.tall { aspect-ratio: 3 / 4; }
@@ -94,8 +96,8 @@
 
   <div class="robots">
     <a href="#pet"><figure><img src="/s/robot3d-pet.png" width="400" height="400" alt="The robot running the pet: a happy orange face"><figcaption>Pet</figcaption></figure></a>
-    <a href="#raw"><figure><img src="/s/robot3d-raw.png" width="400" height="400" alt="The robot running Raw data: its own readings on its screen"><figcaption>Raw data</figcaption></figure></a>
     <a href="#focus"><figure><img src="/s/robot3d-focus.png" width="400" height="400" alt="The robot running Focus: a red ring, 17:42 left, its LEDs counting down"><figcaption>Focus</figcaption></figure></a>
+    <a href="#raw"><figure><img src="/s/robot3d-raw.png" width="400" height="400" alt="The robot running Raw data: its own readings on its screen"><figcaption>Raw data</figcaption></figure></a>
     <a href="#apps"><figure><img src="/s/robot3d-qr.png" width="400" height="400" alt="The robot's QR screen: scan it to pair a phone"><figcaption>QR to pair</figcaption></figure></a>
   </div>
   <p class="note">The robot rendered in 3D from M5Stack's StackChan structure files (MIT), with real screens from it.
@@ -140,17 +142,6 @@
             <p><a class="more" href="/pet">Read more</a> · <a href="https://pet.sa.w42.eu">open pet.sa.w42.eu</a></p>
           </div>
         </div>
-        <div class="app" id="raw">
-          <a class="shot tall" href="/s/raw-page.webp"><img src="/s/raw-page.webp" width="405" height="540"
-            alt="Raw data: buttons for the robot's face, what it says and its LEDs"></a>
-          <div>
-            <h3><a href="/raw">Raw data</a></h3>
-            <p>Every sensor and command: see through its camera, hear it, talk through it, move its
-            head, set its face and LEDs, read IR remotes and NFC tags. With end to end encryption
-            on, only paired browsers can read the robot: the server relays ciphertext.</p>
-            <p><a class="more" href="/raw">Read more</a> · <a href="https://raw.sa.w42.eu">open raw.sa.w42.eu</a></p>
-          </div>
-        </div>
         <div class="app" id="focus">
           <a class="shot tall" href="/s/focus-page.webp"><img src="/s/focus-page.webp" width="600" height="1090"
             alt="Focus on a phone: the ring with 17:38 left, the task, today's count and the week"></a>
@@ -163,7 +154,37 @@
           </div>
         </div>
       </div>
-      <p style="margin-top:14px">More apps are coming. Planned: dev.sa.w42.eu, a higher level API for developers and AI agents.</p>
+      <p style="margin-top:14px">More apps are coming.</p>
+    </section>
+
+    <section class="card" id="dev-apps">
+      <h2>Apps for developers</h2>
+      <p>For tinkering with the robot, and for giving it to your own programs and AI agents.</p>
+      <div class="apps">
+        <div class="app" id="raw">
+          <a class="shot tall" href="/s/raw-page.webp"><img src="/s/raw-page.webp" width="405" height="540"
+            alt="Raw data: buttons for the robot's face, what it says and its LEDs"></a>
+          <div>
+            <h3><a href="/raw">Raw data</a></h3>
+            <p>Every sensor and command: see through its camera, hear it, talk through it, move its
+            head, set its face and LEDs, read IR remotes and NFC tags. With end to end encryption
+            on, only paired browsers can read the robot: the server relays ciphertext.</p>
+            <p><a class="more" href="/raw">Read more</a> · <a href="https://raw.sa.w42.eu">open raw.sa.w42.eu</a></p>
+          </div>
+        </div>
+        <div class="app" id="dev">
+          <a class="shot tall" href="/s/dev-page.webp"><img src="/s/dev-page.webp" width="600" height="1100"
+            alt="Dev's page: a robot online, Try it with buttons to show text, set the face, move the head, light the LEDs, play a chime and ask a question; keys and events"></a>
+          <div>
+            <h3><a href="/dev">Dev</a><span class="tag">online soon</span></h3>
+            <p>Your robot for your own programs and AI agents: show text on its screen, ask a
+            question and get the button tapped, light the LEDs as a progress bar, play a chime, hear
+            when someone pats its head. One <code>curl</code> per action, or MCP for Claude Code and
+            other agents, with a key per robot. And a Go kit for writing new apps.</p>
+            <p><a class="more" href="/dev">Read more</a> · dev.sa.w42.eu is coming online soon; run it at home today</p>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section class="card">
@@ -191,6 +212,9 @@
         <li><a href="https://github.com/mj41/s-w42-eu-pet" target="_blank" rel="noopener" data-ext="GitHub">s-w42-eu-pet</a>: pet.sa.w42.eu.
           <span class="lic">MIT</span></li>
         <li><a href="https://github.com/mj41/s-w42-eu-focus" target="_blank" rel="noopener" data-ext="GitHub">s-w42-eu-focus</a>: focus.sa.w42.eu.
+          <span class="lic">Apache-2.0</span></li>
+        <li><a href="https://github.com/mj41/s-w42-eu-dev" target="_blank" rel="noopener" data-ext="GitHub">s-w42-eu-dev</a>: dev.sa.w42.eu (online soon),
+          the robot for your programs (HTTP) and AI agents (MCP), and a Go kit for apps.
           <span class="lic">Apache-2.0</span></li>
         <li><a href="https://github.com/mj41/s-w42-eu-sbot" target="_blank" rel="noopener" data-ext="GitHub">s-w42-eu-sbot</a>: a cockpit at
           home that also drives a micro:bit car. <span class="lic">Apache-2.0</span></li>

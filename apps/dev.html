@@ -1,0 +1,93 @@
+{{define "description"}}Dev: your Stackchan robot for your own programs and AI agents (HTTP and MCP), and a Go kit for robot apps. dev.sa.w42.eu is coming online soon.{{end}}
+{{define "main"}}
+  <p class="sub">Your robot for your own programs and AI agents, and a Go kit for writing new
+  robot apps. dev.sa.w42.eu is coming online soon; you can run it at home today.</p>
+  <div class="actions">
+    <a class="btn main" href="https://github.com/mj41/s-w42-eu-dev#readme" target="_blank" rel="noopener">Run it at home (GitHub)</a>
+    <a class="btn" href="https://sm.w42.eu">Set up a robot</a>
+  </div>
+
+  <div class="hero">
+    <div>
+      <ul class="what">
+        <li><b>A script in any language</b> shows text on the robot, nods, lights the LEDs as a
+        progress bar, plays a chime: one <code>curl</code> each, no robot protocol to learn.</li>
+        <li><b>An AI agent</b> (Claude Code or any MCP client) shows short text, speaks in a bubble,
+        asks you "Deploy now? Yes / Not yet" and gets the button you tapped, and hears when you pat
+        the robot's head or hold a tag near it.</li>
+        <li><b>App authors</b> (Pet, Focus, the next one) use the same building blocks in Go, so a
+        new robot app is a few hundred lines instead of a few thousand.</li>
+      </ul>
+    </div>
+    <figure><a class="shot" href="/s/dev-page.webp"><img src="/s/dev-page.webp" width="600" height="1100"
+      alt="Dev's page: a robot online, Try it with buttons to show text, set the face, move the head, light the LEDs, play a chime and ask a question; keys and events"></a>
+      <figcaption>Dev's page: try every action, make keys, watch events</figcaption></figure>
+  </div>
+
+  <div class="cards">
+    <section class="card">
+      <h2>Two lines to start</h2>
+      <p>A script shows a green card on the robot:</p>
+      <pre><code>curl -X POST $DEV/v1/robots/$ROBOT/show -H "Authorization: Bearer $KEY" \
+  -d '{"title":"Build","text":"All tests pass","color":"green","progress":1}'</code></pre>
+      <p>Claude Code gets a body on your desk:</p>
+      <pre><code>claude mcp add --transport http stackchan $DEV/mcp --header "Authorization: Bearer $KEY"</code></pre>
+      <p class="note">Dev's page makes the key and shows both lines with your robot and address filled in.</p>
+    </section>
+
+    <section class="card">
+      <h2>The actions</h2>
+      <p>Every action is <code>POST /v1/robots/&lt;robot&gt;/&lt;action&gt;</code> with a JSON
+      object, and the same action is the MCP tool <code>robot_&lt;action&gt;</code>.</p>
+      <ul>
+        <li><b>show</b> a card with text that sizes itself, a progress bar, or a picture;
+        <b>say</b> a speech bubble; <b>face</b> an emotion, or the robot's own readings.</li>
+        <li><b>move</b> the head (nod, shake, or yaw and pitch); <b>leds</b> a colour, a bar or an
+        effect; <b>sound</b> a chime or a few notes.</li>
+        <li><b>ask</b> a question with 2 to 4 buttons and get the answer tapped.</li>
+        <li><b>events</b>: what a person did: a tap, a pat or a stroke on the head, shaken, picked
+        up, someone near, a tag, a TV remote's button.</li>
+        <li><b>state</b> (online, its readings), and <b>command</b> for any of the robot's own
+        commands, except switching its apps, restarting it, or turning streams on.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Keys</h2>
+      <p>A key belongs to one robot, and only a browser paired with that robot (by its QR code)
+      makes one. Dev keeps only a hash of it, lists your keys with when each was last used, and
+      deletes them. For a robot set up by a manager, its keys show on the manager's page next to
+      its paired browsers, and can be removed there too.</p>
+    </section>
+
+    <section class="card">
+      <h2>For app authors: the Go kit</h2>
+      <ul>
+        <li><b>robothub</b>: the robot side of an app: tokens, one connection per robot, pairing codes.</li>
+        <li><b>robot</b>: cards, the face, the head, the LEDs, sounds on a connected robot.</li>
+        <li><b>screen</b>, <b>sound</b>, <b>leds</b>: 320×240 cards and questions, chimes and
+        melodies, the LEDs in the robot's order.</li>
+        <li><b>gesture</b>: the robot's raw events as what a person did.</li>
+      </ul>
+      <p><a class="more" href="https://pkg.go.dev/github.com/mj41/s-w42-eu-dev" target="_blank" rel="noopener" data-ext="pkg.go.dev">The packages</a></p>
+    </section>
+
+    <section class="card">
+      <h2>Start</h2>
+      <ol>
+        <li>Run Dev on a computer at home (one Go binary or a container), until dev.sa.w42.eu is online.</li>
+        <li>Give your robot Dev as one of its apps: with the home manager, or over USB.</li>
+        <li>On the robot, switch to Dev and scan its QR code with your phone or computer.</li>
+        <li><b>New key</b> on Dev's page: it is shown once, with a <code>curl</code> line to try and
+        the line that gives it to Claude Code.</li>
+      </ol>
+    </section>
+
+    <section class="card">
+      <h2>Source</h2>
+      <p><a href="https://github.com/mj41/s-w42-eu-dev" target="_blank" rel="noopener" data-ext="GitHub">s-w42-eu-dev</a>:
+      one Go server and the Go kit. <span class="lic">Apache-2.0</span></p>
+      <p class="note">A proof of concept, vibe coded and tested on a real robot at home, not reviewed by humans yet.</p>
+    </section>
+  </div>
+{{end}}

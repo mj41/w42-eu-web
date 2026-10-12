@@ -7,7 +7,7 @@ with links to [mj41.cz](https://mj41.cz) and [GitHub](https://github.com/mj41) f
 It also serves [s.w42.eu](https://s.w42.eu), the Stackchan project page (the robots' manager at
 sm.w42.eu, their apps under sa.w42.eu, with the robot (`s/robot3d-*.png`) and screenshots of the apps
 (`s/*.webp`)) and a page per app: [s.w42.eu/pet](https://s.w42.eu/pet),
-[/raw](https://s.w42.eu/raw), [/focus](https://s.w42.eu/focus) (`app.html` around
+[/focus](https://s.w42.eu/focus), [/raw](https://s.w42.eu/raw), [/dev](https://s.w42.eu/dev) (`app.html` around
 `apps/<app>.html`; the parts each app uses link to that part on [s3d.w42.eu](https://s3d.w42.eu)),
 and [mcbot.w42.eu](https://mcbot.w42.eu), the Minecraft robots' page, with a screenshot of their
 dashboard (`mcbot/*.png|webp`: small in the page, the full size on click, by CSS alone).

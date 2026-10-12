@@ -146,8 +146,12 @@ func TestAppPages(t *testing.T) {
 	}
 	for _, a := range apps {
 		code, body := get("s.w42.eu", "/"+a.ID)
-		if code != 200 || !strings.Contains(body, "<h1>"+a.Name+"</h1>") || !strings.Contains(body, `href="https://s3d.w42.eu/#`+a.ID+`"`) {
+		if code != 200 || !strings.Contains(body, "<h1>"+a.Name+"</h1>") {
 			t.Errorf("s.w42.eu/%s: %d, not its page", a.ID, code)
+		}
+		// the apps s3d.w42.eu knows link to it
+		if a.ID != "dev" && !strings.Contains(body, `href="https://s3d.w42.eu/#`+a.ID+`"`) {
+			t.Errorf("s.w42.eu/%s: no link to s3d.w42.eu/#%s", a.ID, a.ID)
 		}
 		if !strings.Contains(body, `href="/`+a.ID+`" aria-current="page"`) {
 			t.Errorf("s.w42.eu/%s: the app switcher does not mark it", a.ID)
@@ -156,7 +160,10 @@ func TestAppPages(t *testing.T) {
 			t.Errorf("w42.eu/%s: %d, want 404", a.ID, code)
 		}
 		s := string(sHTML)
-		for _, want := range []string{`<a href="#` + a.ID + `">`, `id="` + a.ID + `"`, `<h3><a href="/` + a.ID + `">`} {
+		if a.ID != "dev" && !strings.Contains(string(sHTML), `<a href="#`+a.ID+`">`) { // Dev has no robot picture yet
+			t.Errorf("s.html: no robot picture links to #%s", a.ID)
+		}
+		for _, want := range []string{`id="` + a.ID + `"`, `<h3><a href="/` + a.ID + `">`} {
 			if !strings.Contains(s, want) {
 				t.Errorf("s.html: no %s", want)
 			}
