@@ -46,7 +46,7 @@
     color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 1px 9px;
     margin-left: 8px; vertical-align: middle;
   }
-  .robots { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 0 0 4px; }
+  .robots { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 0 0 4px; }
   .robots a { display: block; text-decoration: none; border-radius: 12px; }
   .robots a:hover, .robots a:focus-visible { background: var(--card); }
   .robots a:hover figcaption { color: var(--accent); }
@@ -75,7 +75,7 @@
   .more { font-weight: 600; }
   .more::after { content: " \2192"; }
   @media (max-width: 640px) {
-    .robots { grid-template-columns: repeat(2, 1fr); }
+    .robots { grid-template-columns: repeat(3, 1fr); }
     .row { grid-template-columns: 1fr; }
     .app { grid-template-columns: 96px 1fr; gap: 14px; }
     .row .shot { max-width: 320px; }
@@ -98,6 +98,7 @@
     <a href="#pet"><figure><img src="/s/robot3d-pet.png" width="400" height="400" alt="The robot running the pet: a happy orange face"><figcaption>Pet</figcaption></figure></a>
     <a href="#focus"><figure><img src="/s/robot3d-focus.png" width="400" height="400" alt="The robot running Focus: a red ring, 17:42 left, its LEDs counting down"><figcaption>Focus</figcaption></figure></a>
     <a href="#raw"><figure><img src="/s/robot3d-raw.png" width="400" height="400" alt="The robot running Raw data: its own readings on its screen"><figcaption>Raw data</figcaption></figure></a>
+    <a href="#dev"><figure><img src="/s/robot3d-dev.png" width="400" height="400" alt="The robot running Dev: a program's card, Build: All tests pass, its LEDs a full green bar"><figcaption>Dev</figcaption></figure></a>
     <a href="#apps"><figure><img src="/s/robot3d-qr.png" width="400" height="400" alt="The robot's QR screen: scan it to pair a phone"><figcaption>QR to pair</figcaption></figure></a>
   </div>
   <p class="note">The robot rendered in 3D from M5Stack's StackChan structure files (MIT), with real screens from it.

@@ -32,18 +32,19 @@ func TestImages(t *testing.T) {
 	srv := httptest.NewServer(handler())
 	defer srv.Close()
 	for p, want := range map[string]int{
-		"/mcbot/dashboard.png":       200,
+		"/mcbot/dashboard.png":        200,
 		"/mcbot/dashboard-small.webp": 200,
-		"/mcbot/":                    404,
-		"/mcbot/nope.png":            404,
-		"/mcbot/../main.go":          404,
-		"/mcbot/%2e%2e%2fmain.go":    404,
-		"/s/robot3d-focus.png":       200,
-		"/s/":                        404,
-		"/s/nope.webp":               404,
-		"/main.go":                   404,
-		"/x/main.go":                 404,
-		"/s/../go.mod":               404,
+		"/mcbot/":                     404,
+		"/mcbot/nope.png":             404,
+		"/mcbot/../main.go":           404,
+		"/mcbot/%2e%2e%2fmain.go":     404,
+		"/s/robot3d-focus.png":        200,
+		"/s/robot3d-dev.png":          200,
+		"/s/":                         404,
+		"/s/nope.webp":                404,
+		"/main.go":                    404,
+		"/x/main.go":                  404,
+		"/s/../go.mod":                404,
 	} {
 		res, err := http.Get(srv.URL + p)
 		if err != nil {
