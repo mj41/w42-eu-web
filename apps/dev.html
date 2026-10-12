@@ -1,10 +1,11 @@
-{{define "description"}}Dev: your Stackchan robot for your own programs and AI agents (HTTP and MCP), and a Go kit for robot apps. dev.sa.w42.eu is coming online soon.{{end}}
+{{define "description"}}Dev: your Stackchan robot for your own programs and AI agents (HTTP and MCP), and a Go kit for robot apps. On dev.sa.w42.eu.{{end}}
 {{define "main"}}
   <p class="sub">Your robot for your own programs and AI agents, and a Go kit for writing new
-  robot apps. dev.sa.w42.eu is coming online soon; you can run it at home today.</p>
+  robot apps. Online at dev.sa.w42.eu, or on a computer at home.</p>
   <div class="actions">
-    <a class="btn main" href="https://github.com/mj41/s-w42-eu-dev#readme" target="_blank" rel="noopener">Run it at home (GitHub)</a>
+    <a class="btn main" href="https://dev.sa.w42.eu">Open dev.sa.w42.eu</a>
     <a class="btn" href="https://sm.w42.eu">Set up a robot</a>
+    <a class="btn" href="https://github.com/mj41/s-w42-eu-dev#readme" target="_blank" rel="noopener">Run it at home (GitHub)</a>
   </div>
 
   <div class="hero">
@@ -89,9 +90,11 @@ export SDEV_KEY=sdev_…                        # the key: keep it like a passwo
     <section class="card">
       <h2>Start</h2>
       <ol>
-        <li>Run Dev on a computer at home (one Go binary or a container), until dev.sa.w42.eu is online.</li>
-        <li>Give your robot Dev as one of its apps: with the home manager, or over USB.</li>
-        <li>On the robot, switch to Dev and scan its QR code with your phone or computer.</li>
+        <li>Give your robot Dev as one of its apps: on <a href="https://sm.w42.eu">sm.w42.eu</a>
+        (pick Dev when you set the robot up, or add it on the robot's card), or at home with your
+        own Dev and the home manager.</li>
+        <li>On the robot, swipe up, tap QR, then Next until it shows Dev, and Connect. Scan its QR
+        code with your phone, or open the link under it on your computer.</li>
         <li><b>New key</b> on Dev's page: it is shown once, with the three <code>SDEV_</code> lines
         for your shell.</li>
         <li>Run an example, or give the key to Claude Code. Step by step:
