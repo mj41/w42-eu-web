@@ -17,9 +17,8 @@ func TestPage(t *testing.T) {
 		"home.w42.eu":      indexHTML,
 		"S.w42.eu:443":     indexHTML,
 		"s.i41.eu.evil":    indexHTML,
-		"s.w42.eu":         indexHTML, // its old name: no Stackchan page there any more
-		"s.i41.eu":         sHTML,
-		"S.i41.eu:443":     sHTML,
+		"s.w42.eu":         indexHTML,
+		"s.i41.eu":         indexHTML, // i41eu-web's now
 		"i41.eu":           indexHTML,
 		"m.i41.eu":         indexHTML,
 		"mcbot.w42.eu":     mcbotHTML,
@@ -42,10 +41,7 @@ func TestImages(t *testing.T) {
 		"/mcbot/nope.png":             404,
 		"/mcbot/../main.go":           404,
 		"/mcbot/%2e%2e%2fmain.go":     404,
-		"/s/robot3d-focus.png":        200,
-		"/s/robot3d-dev.png":          200,
-		"/s/":                         404,
-		"/s/nope.webp":                404,
+		"/s/robot3d-focus.png":        404, // i41eu-web's now
 		"/main.go":                    404,
 		"/x/main.go":                  404,
 		"/s/../go.mod":                404,
@@ -62,17 +58,15 @@ func TestImages(t *testing.T) {
 			t.Errorf("%s: %s", p, res.Header.Get("Content-Type"))
 		}
 	}
-	// every image is named by its page, and every image a page names is there
-	for dir, html := range map[string][]byte{"mcbot": mcbotHTML, "s": sHTML} {
-		names, _ := images.ReadDir(dir)
-		for _, n := range names {
-			if !bytes.Contains(html, []byte("/"+dir+"/"+n.Name())) {
-				t.Errorf("%s.html does not name %s", dir, n.Name())
-			}
+	// every image is named by mcbot.html, and every image a page names is there
+	names, _ := images.ReadDir("mcbot")
+	for _, n := range names {
+		if !bytes.Contains(mcbotHTML, []byte("/mcbot/"+n.Name())) {
+			t.Errorf("mcbot.html does not name %s", n.Name())
 		}
 	}
 	for name, page := range allPages() {
-		for _, m := range regexp.MustCompile(`"/(s|mcbot)/([^"]+)"`).FindAllSubmatch(page, -1) {
+		for _, m := range regexp.MustCompile(`"/([a-z]+)/([^"]+\.(png|webp))"`).FindAllSubmatch(page, -1) {
 			if _, err := images.ReadFile(string(m[1]) + "/" + string(m[2])); err != nil {
 				t.Errorf("%s names a missing image: /%s/%s", name, m[1], m[2])
 			}
@@ -125,71 +119,25 @@ func TestExternalLinksMarked(t *testing.T) {
 
 // allPages are every page served, by name.
 func allPages() map[string][]byte {
-	pages := map[string][]byte{"index.html": indexHTML, "s.html": sHTML, "mcbot.html": mcbotHTML}
-	for id, p := range appPages {
-		pages["apps/"+id+".html"] = p
-	}
-	return pages
+	return map[string][]byte{"index.html": indexHTML, "mcbot.html": mcbotHTML}
 }
 
-// Each app has a page on s.i41.eu only, and s.html's robots link to the apps' anchors, where
-// each app links to its page.
-func TestAppPages(t *testing.T) {
+// No app pages here any more: they are i41eu-web's (s.i41.eu/<app>).
+func TestNoAppPages(t *testing.T) {
 	srv := httptest.NewServer(handler())
 	defer srv.Close()
-	get := func(host, p string) (int, string) {
-		req, _ := http.NewRequest("GET", srv.URL+p, nil)
-		req.Host = host
-		res, err := http.DefaultClient.Do(req)
-		if err != nil {
-			t.Fatal(err)
-		}
-		defer res.Body.Close()
-		var b bytes.Buffer
-		b.ReadFrom(res.Body)
-		return res.StatusCode, b.String()
-	}
-	for _, a := range apps {
-		for _, host := range []string{"s.i41.eu"} {
-			code, body := get(host, "/"+a.ID)
-			if code != 200 || !strings.Contains(body, "<h1>"+a.Name+"</h1>") {
-				t.Errorf("%s/%s: %d, not its page", host, a.ID, code)
+	for _, host := range []string{"w42.eu", "s.i41.eu"} {
+		for _, p := range []string{"/pet", "/focus", "/raw", "/dev"} {
+			req, _ := http.NewRequest("GET", srv.URL+p, nil)
+			req.Host = host
+			res, err := http.DefaultClient.Do(req)
+			if err != nil {
+				t.Fatal(err)
 			}
-			// the apps s3d knows link to it
-			if a.ID != "dev" && !strings.Contains(body, `href="https://s.i41.eu/s3d/#`+a.ID+`"`) {
-				t.Errorf("%s/%s: no link to s.i41.eu/s3d/#%s", host, a.ID, a.ID)
+			res.Body.Close()
+			if res.StatusCode != 404 {
+				t.Errorf("%s%s: %d, want 404", host, p, res.StatusCode)
 			}
-			if !strings.Contains(body, `href="/`+a.ID+`" aria-current="page"`) {
-				t.Errorf("%s/%s: the app switcher does not mark it", host, a.ID)
-			}
-		}
-		if code, _ := get("w42.eu", "/"+a.ID); code != 404 {
-			t.Errorf("w42.eu/%s: %d, want 404", a.ID, code)
-		}
-		s := string(sHTML)
-		if a.ID != "dev" && !strings.Contains(string(sHTML), `<a href="#`+a.ID+`">`) { // Dev has no robot picture yet
-			t.Errorf("s.html: no robot picture links to #%s", a.ID)
-		}
-		for _, want := range []string{`id="` + a.ID + `"`, `<h3><a href="/` + a.ID + `">`} {
-			if !strings.Contains(s, want) {
-				t.Errorf("s.html: no %s", want)
-			}
-		}
-	}
-	if code, _ := get("s.i41.eu", "/nope"); code != 404 {
-		t.Errorf("s.i41.eu/nope: %d, want 404", code)
-	}
-	if code, body := get("s.i41.eu", "/healthz"); code != 200 || body != "ok\n" {
-		t.Errorf("/healthz: %d %q", code, body)
-	}
-	// the robots and the apps in the same order
-	s := string(sHTML)
-	last := 0
-	for _, a := range apps {
-		if i := strings.Index(s, `id="`+a.ID+`"`); i < last {
-			t.Errorf("s.html: %s out of order", a.ID)
-		} else {
-			last = i
 		}
 	}
 }

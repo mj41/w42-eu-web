@@ -1,16 +1,12 @@
-// Command w42-eu-web serves the w42.eu landing page: a list of the projects that
-// run under w42.eu, with links to mj41.cz and GitHub. It also serves s.i41.eu,
-// the Stackchan project page with its pictures (/s/*.png, /s/*.webp) and a page per
-// app (s.i41.eu/<app>), and mcbot.w42.eu,
-// the Minecraft robots' page with its screenshots (/mcbot/*.png). The pages are
-// embedded and chosen by the request's host.
+// Command w42-eu-web serves the w42.eu landing page: a list of mj41's projects, with links to
+// mj41.cz and GitHub. It also serves mcbot.w42.eu, the Minecraft robots' page with its
+// screenshots (/mcbot/*.png, /mcbot/*.webp). The pages are embedded and chosen by the request's
+// host.
 package main
 
 import (
-	"bytes"
 	"embed"
 	"flag"
-	"html/template"
 	"log/slog"
 	"net"
 	"net/http"
@@ -23,55 +19,19 @@ import (
 //go:embed index.html
 var indexHTML []byte
 
-//go:embed s.html
-var sHTML []byte
-
 //go:embed mcbot.html
 var mcbotHTML []byte
 
-// images are the pages' pictures, served at /<dir>/<name>: mcbot.html's
-// screenshots and s.html's robots and screenshots.
+// images are mcbot.html's screenshots, served at /mcbot/<name>.
 //
-//go:embed mcbot/*.png mcbot/*.webp s/*.png s/*.webp
+//go:embed mcbot/*.png mcbot/*.webp
 var images embed.FS
-
-// imageDirs are the directories in images.
-var imageDirs = map[string]bool{"mcbot": true, "s": true}
 
 // imageTypes are the images' content types by extension.
 var imageTypes = map[string]string{".png": "image/png", ".webp": "image/webp"}
 
-//go:embed app.html apps/*.html
-var appFiles embed.FS
-
-// app is one of s.i41.eu's apps: its page s.i41.eu/<ID> is app.html around apps/<ID>.html.
-type app struct{ ID, Name string }
-
-// apps are in the order of s.html's apps: the apps, then the apps for developers.
-var apps = []app{{"pet", "Pet"}, {"focus", "Focus"}, {"raw", "Raw data"}, {"dev", "Dev"}}
-
-// appPages are the apps' pages by ID.
-var appPages = renderApps()
-
-func renderApps() map[string][]byte {
-	pages := map[string][]byte{}
-	for _, a := range apps {
-		t := template.Must(template.ParseFS(appFiles, "app.html", "apps/"+a.ID+".html"))
-		var b bytes.Buffer
-		if err := t.Execute(&b, struct {
-			app
-			Apps []app
-		}{a, apps}); err != nil {
-			panic(err)
-		}
-		pages[a.ID] = b.Bytes()
-	}
-	return pages
-}
-
 // pages maps a host to its page; any other host gets the w42.eu page.
 var pages = map[string][]byte{
-	"s.i41.eu":     sHTML,
 	"mcbot.w42.eu": mcbotHTML,
 }
 
@@ -100,21 +60,12 @@ func handler() http.Handler {
 	mux.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
 		writePage(w, page(r.Host))
 	})
-	// an app's page, on s.i41.eu only
-	mux.HandleFunc("GET /{app}", func(w http.ResponseWriter, r *http.Request) {
-		p, ok := appPages[r.PathValue("app")]
-		if !ok || !bytes.Equal(page(r.Host), sHTML) {
-			http.NotFound(w, r)
-			return
-		}
-		writePage(w, p)
-	})
-	// one file by name: no listing, and {dir} and {name} cannot hold a "/"
-	mux.HandleFunc("GET /{dir}/{name}", func(w http.ResponseWriter, r *http.Request) {
-		dir, name := r.PathValue("dir"), r.PathValue("name")
+	// one file by name: no listing, and {name} cannot hold a "/"
+	mux.HandleFunc("GET /mcbot/{name}", func(w http.ResponseWriter, r *http.Request) {
+		name := r.PathValue("name")
 		ct := imageTypes[path.Ext(name)]
-		b, err := images.ReadFile(dir + "/" + name)
-		if !imageDirs[dir] || ct == "" || err != nil {
+		b, err := images.ReadFile("mcbot/" + name)
+		if ct == "" || err != nil {
 			http.NotFound(w, r)
 			return
 		}
