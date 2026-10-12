@@ -72,6 +72,7 @@ func renderApps() map[string][]byte {
 // pages maps a host to its page; any other host gets the w42.eu page.
 var pages = map[string][]byte{
 	"s.w42.eu":     sHTML,
+	"s.i41.eu":     sHTML, // the move off s*.w42.eu: the same page under its new name
 	"mcbot.w42.eu": mcbotHTML,
 }
 
@@ -100,7 +101,7 @@ func handler() http.Handler {
 	mux.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
 		writePage(w, page(r.Host))
 	})
-	// an app's page, on s.w42.eu only
+	// an app's page, on s.w42.eu (s.i41.eu) only
 	mux.HandleFunc("GET /{app}", func(w http.ResponseWriter, r *http.Request) {
 		p, ok := appPages[r.PathValue("app")]
 		if !ok || !bytes.Equal(page(r.Host), sHTML) {
