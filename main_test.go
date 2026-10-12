@@ -81,10 +81,10 @@ func TestImages(t *testing.T) {
 }
 
 // Links to other sites open in a new tab, so the visitor keeps this page; links to our own
-// sites (w42.eu and its subdomains, mj41.cz) stay in the tab.
+// sites (w42.eu, i41.eu, q41.eu and their subdomains, mj41.cz) stay in the tab.
 func TestExternalLinksOpenANewTab(t *testing.T) {
 	link := regexp.MustCompile(`<a\b[^>]*\bhref="https?://([^/"]+)[^"]*"[^>]*>`)
-	ours := regexp.MustCompile(`(^|\.)(w42\.eu|mj41\.cz)$`)
+	ours := regexp.MustCompile(`(^|\.)(w42\.eu|i41\.eu|q41\.eu|mj41\.cz)$`)
 	for name, page := range allPages() {
 		for _, m := range link.FindAllSubmatch(page, -1) {
 			tag, host := string(m[0]), string(m[1])
@@ -105,7 +105,7 @@ func TestExternalLinksOpenANewTab(t *testing.T) {
 // unless the link's own text names it ("github.com/mj41", "infinite.pm").
 func TestExternalLinksMarked(t *testing.T) {
 	link := regexp.MustCompile(`(?s)<a\b([^>]*\bhref="https?://([^/"]+)[^"]*"[^>]*)>(.*?)</a>`)
-	ours := regexp.MustCompile(`(^|\.)(w42\.eu|mj41\.cz)$`)
+	ours := regexp.MustCompile(`(^|\.)(w42\.eu|i41\.eu|q41\.eu|mj41\.cz)$`)
 	for name, page := range allPages() {
 		for _, m := range link.FindAllSubmatch(page, -1) {
 			attrs, host, text := string(m[1]), strings.ToLower(string(m[2])), strings.ToLower(string(m[3]))
@@ -132,7 +132,7 @@ func allPages() map[string][]byte {
 	return pages
 }
 
-// Each app has a page on s.w42.eu only, and s.html's robots link to the apps' anchors, where
+// Each app has a page on s.i41.eu (and its old name s.w42.eu) only, and s.html's robots link to the apps' anchors, where
 // each app links to its page.
 func TestAppPages(t *testing.T) {
 	srv := httptest.NewServer(handler())
@@ -150,16 +150,18 @@ func TestAppPages(t *testing.T) {
 		return res.StatusCode, b.String()
 	}
 	for _, a := range apps {
-		code, body := get("s.w42.eu", "/"+a.ID)
-		if code != 200 || !strings.Contains(body, "<h1>"+a.Name+"</h1>") {
-			t.Errorf("s.w42.eu/%s: %d, not its page", a.ID, code)
-		}
-		// the apps s3d.w42.eu knows link to it
-		if a.ID != "dev" && !strings.Contains(body, `href="https://s3d.w42.eu/#`+a.ID+`"`) {
-			t.Errorf("s.w42.eu/%s: no link to s3d.w42.eu/#%s", a.ID, a.ID)
-		}
-		if !strings.Contains(body, `href="/`+a.ID+`" aria-current="page"`) {
-			t.Errorf("s.w42.eu/%s: the app switcher does not mark it", a.ID)
+		for _, host := range []string{"s.i41.eu", "s.w42.eu"} { // s.w42.eu: the old name, until it redirects
+			code, body := get(host, "/"+a.ID)
+			if code != 200 || !strings.Contains(body, "<h1>"+a.Name+"</h1>") {
+				t.Errorf("%s/%s: %d, not its page", host, a.ID, code)
+			}
+			// the apps s3d knows link to it
+			if a.ID != "dev" && !strings.Contains(body, `href="https://s.i41.eu/s3d/#`+a.ID+`"`) {
+				t.Errorf("%s/%s: no link to s.i41.eu/s3d/#%s", host, a.ID, a.ID)
+			}
+			if !strings.Contains(body, `href="/`+a.ID+`" aria-current="page"`) {
+				t.Errorf("%s/%s: the app switcher does not mark it", host, a.ID)
+			}
 		}
 		if code, _ := get("w42.eu", "/"+a.ID); code != 404 {
 			t.Errorf("w42.eu/%s: %d, want 404", a.ID, code)
