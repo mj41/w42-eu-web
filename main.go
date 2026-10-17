@@ -5,13 +5,16 @@
 package main
 
 import (
+	"crypto/sha256"
 	"embed"
+	"encoding/hex"
 	"flag"
 	"log/slog"
 	"net"
 	"net/http"
 	"os"
 	"path"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -31,9 +34,43 @@ var images embed.FS
 // imageTypes are the images' content types by extension.
 var imageTypes = map[string]string{".png": "image/png", ".webp": "image/webp"}
 
+// imageHashes maps "dir/name.ext" to the first 8 hex digits of the sha256 of the embedded bytes.
+var imageHashes = func() map[string]string {
+	m := map[string]string{}
+	for _, dir := range []string{"mcbot", "img"} {
+		files, _ := images.ReadDir(dir)
+		for _, f := range files {
+			b, _ := images.ReadFile(dir + "/" + f.Name())
+			sum := sha256.Sum256(b)
+			m[dir+"/"+f.Name()] = hex.EncodeToString(sum[:])[:8]
+		}
+	}
+	return m
+}()
+
+var imageRef = regexp.MustCompile(`(["'])/(img|mcbot)/([^"'/]+)(\.[a-z]+)(["'])`)
+
+// hashImageURLs rewrites every "/img/NAME.ext" and "/mcbot/NAME.ext" in html to
+// "/img/NAME.HASH.ext": a changed picture gets a new URL, so it can be cached for a year.
+func hashImageURLs(html []byte) []byte {
+	return imageRef.ReplaceAllFunc(html, func(ref []byte) []byte {
+		m := imageRef.FindSubmatch(ref)
+		h, ok := imageHashes[string(m[2])+"/"+string(m[3])+string(m[4])]
+		if !ok {
+			return ref
+		}
+		return []byte(string(m[1]) + "/" + string(m[2]) + "/" + string(m[3]) + "." + h + string(m[4]) + string(m[5]))
+	})
+}
+
+var (
+	indexPage = hashImageURLs(indexHTML)
+	mcbotPage = hashImageURLs(mcbotHTML)
+)
+
 // pages maps a host to its page; any other host gets the w42.eu page.
 var pages = map[string][]byte{
-	"mcbot.w42.eu": mcbotHTML,
+	"mcbot.w42.eu": mcbotPage,
 }
 
 func page(host string) []byte {
@@ -43,7 +80,7 @@ func page(host string) []byte {
 	if p, ok := pages[strings.ToLower(host)]; ok {
 		return p
 	}
-	return indexHTML
+	return indexPage
 }
 
 func writePage(w http.ResponseWriter, p []byte) {
@@ -65,15 +102,25 @@ func handler() http.Handler {
 	for _, dir := range []string{"mcbot", "img"} {
 		mux.HandleFunc("GET /"+dir+"/{name}", func(w http.ResponseWriter, r *http.Request) {
 			name := r.PathValue("name")
-			ct := imageTypes[path.Ext(name)]
+			ext := path.Ext(name)
+			ct := imageTypes[ext]
+			cache := "public, max-age=300" // the plain name: bookmarks, other sites
 			b, err := images.ReadFile(dir + "/" + name)
+			if err != nil {
+				// NAME.HASH.ext, only with the file's current hash
+				stem := strings.TrimSuffix(name, ext)
+				if i := strings.LastIndex(stem, "."); i >= 0 && imageHashes[dir+"/"+stem[:i]+ext] == stem[i+1:] {
+					b, err = images.ReadFile(dir + "/" + stem[:i] + ext)
+					cache = "public, max-age=31536000, immutable"
+				}
+			}
 			if ct == "" || err != nil {
 				http.NotFound(w, r)
 				return
 			}
 			h := w.Header()
 			h.Set("Content-Type", ct)
-			h.Set("Cache-Control", "public, max-age=86400")
+			h.Set("Cache-Control", cache)
 			h.Set("X-Content-Type-Options", "nosniff")
 			w.Write(b)
 		})

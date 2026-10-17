@@ -12,18 +12,18 @@ import (
 
 func TestPage(t *testing.T) {
 	for host, want := range map[string][]byte{
-		"w42.eu":           indexHTML,
-		"localhost:8080":   indexHTML,
-		"home.w42.eu":      indexHTML,
-		"S.w42.eu:443":     indexHTML,
-		"s.i41.eu.evil":    indexHTML,
-		"s.w42.eu":         indexHTML,
-		"s.i41.eu":         indexHTML, // i41eu-web's now
-		"i41.eu":           indexHTML,
-		"m.i41.eu":         indexHTML,
-		"mcbot.w42.eu":     mcbotHTML,
-		"mon.mcbot.w42.eu": indexHTML,
-		"sm.w42.eu":        indexHTML,
+		"w42.eu":           indexPage,
+		"localhost:8080":   indexPage,
+		"home.w42.eu":      indexPage,
+		"S.w42.eu:443":     indexPage,
+		"s.i41.eu.evil":    indexPage,
+		"s.w42.eu":         indexPage,
+		"s.i41.eu":         indexPage, // i41eu-web's now
+		"i41.eu":           indexPage,
+		"m.i41.eu":         indexPage,
+		"mcbot.w42.eu":     mcbotPage,
+		"mon.mcbot.w42.eu": indexPage,
+		"sm.w42.eu":        indexPage,
 	} {
 		if !bytes.Equal(page(host), want) {
 			t.Errorf("page(%q): wrong page", host)
