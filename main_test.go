@@ -153,3 +153,66 @@ func TestNoAppPages(t *testing.T) {
 		}
 	}
 }
+
+// Pages name their images by content hash (/img/NAME.HASH.ext), so a changed picture gets a new
+// URL and can be cached for a year; the plain name still works, briefly cached.
+func TestHashedImageURLs(t *testing.T) {
+	srv := httptest.NewServer(handler())
+	defer srv.Close()
+	get := func(host, p string) (*http.Response, []byte) {
+		req, _ := http.NewRequest("GET", srv.URL+p, nil)
+		req.Host = host
+		res, err := http.DefaultClient.Do(req)
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer res.Body.Close()
+		var b bytes.Buffer
+		b.ReadFrom(res.Body)
+		return res, b.Bytes()
+	}
+	ref := regexp.MustCompile(`(?:src|href)="(/(?:img|mcbot)/[^"]+\.(?:png|webp))"`)
+	hashed := regexp.MustCompile(`^/(img|mcbot)/([^/]+)\.[0-9a-f]{8}(\.(?:png|webp))$`)
+	for _, host := range []string{"w42.eu", "mcbot.w42.eu"} {
+		res, body := get(host, "/")
+		if res.StatusCode != 200 {
+			t.Fatalf("%s: %d", host, res.StatusCode)
+		}
+		refs := ref.FindAllSubmatch(body, -1)
+		if len(refs) == 0 {
+			t.Errorf("%s: no image references", host)
+		}
+		for _, m := range refs {
+			url := string(m[1])
+			hm := hashed.FindStringSubmatch(url)
+			if hm == nil {
+				t.Errorf("%s: %s is not a hashed image URL", host, url)
+				continue
+			}
+			want, err := images.ReadFile(hm[1] + "/" + hm[2] + hm[3])
+			if err != nil {
+				t.Errorf("%s: %s: %v", host, url, err)
+				continue
+			}
+			res, b := get(host, url)
+			if res.StatusCode != 200 || !bytes.Equal(b, want) {
+				t.Errorf("%s: %d, or not the embedded bytes", url, res.StatusCode)
+			}
+			if cc := res.Header.Get("Cache-Control"); cc != "public, max-age=31536000, immutable" {
+				t.Errorf("%s: Cache-Control %q", url, cc)
+			}
+			plain := "/" + hm[1] + "/" + hm[2] + hm[3]
+			res, _ = get(host, plain)
+			if res.StatusCode != 200 || res.Header.Get("Cache-Control") != "public, max-age=300" {
+				t.Errorf("%s: %d, Cache-Control %q", plain, res.StatusCode, res.Header.Get("Cache-Control"))
+			}
+			wrong := "/" + hm[1] + "/" + hm[2] + ".00000000" + hm[3]
+			if strings.Contains(url, ".00000000.") {
+				wrong = "/" + hm[1] + "/" + hm[2] + ".11111111" + hm[3]
+			}
+			if res, _ = get(host, wrong); res.StatusCode != 404 {
+				t.Errorf("%s: %d, want 404", wrong, res.StatusCode)
+			}
+		}
+	}
+}
