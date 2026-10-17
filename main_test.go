@@ -37,6 +37,11 @@ func TestImages(t *testing.T) {
 	for p, want := range map[string]int{
 		"/mcbot/dashboard.png":        200,
 		"/mcbot/dashboard-small.webp": 200,
+		"/img/i41-robot.webp":         200,
+		"/img/infinite-pm.webp":       200,
+		"/img/":                       404,
+		"/img/nope.webp":              404,
+		"/img/%2e%2e%2fmain.go":       404,
 		"/mcbot/":                     404,
 		"/mcbot/nope.png":             404,
 		"/mcbot/../main.go":           404,
@@ -63,6 +68,13 @@ func TestImages(t *testing.T) {
 	for _, n := range names {
 		if !bytes.Contains(mcbotHTML, []byte("/mcbot/"+n.Name())) {
 			t.Errorf("mcbot.html does not name %s", n.Name())
+		}
+	}
+	// every image in img/ is named by index.html
+	names, _ = images.ReadDir("img")
+	for _, n := range names {
+		if !bytes.Contains(indexHTML, []byte("/img/"+n.Name())) {
+			t.Errorf("index.html does not name %s", n.Name())
 		}
 	}
 	for name, page := range allPages() {
