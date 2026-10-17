@@ -22,9 +22,10 @@ var indexHTML []byte
 //go:embed mcbot.html
 var mcbotHTML []byte
 
-// images are mcbot.html's screenshots, served at /mcbot/<name>.
+// images are mcbot.html's screenshots, served at /mcbot/<name>, and index.html's pictures,
+// served at /img/<name>.
 //
-//go:embed mcbot/*.png mcbot/*.webp
+//go:embed mcbot/*.png mcbot/*.webp img/*.webp
 var images embed.FS
 
 // imageTypes are the images' content types by extension.
@@ -61,20 +62,22 @@ func handler() http.Handler {
 		writePage(w, page(r.Host))
 	})
 	// one file by name: no listing, and {name} cannot hold a "/"
-	mux.HandleFunc("GET /mcbot/{name}", func(w http.ResponseWriter, r *http.Request) {
-		name := r.PathValue("name")
-		ct := imageTypes[path.Ext(name)]
-		b, err := images.ReadFile("mcbot/" + name)
-		if ct == "" || err != nil {
-			http.NotFound(w, r)
-			return
-		}
-		h := w.Header()
-		h.Set("Content-Type", ct)
-		h.Set("Cache-Control", "public, max-age=86400")
-		h.Set("X-Content-Type-Options", "nosniff")
-		w.Write(b)
-	})
+	for _, dir := range []string{"mcbot", "img"} {
+		mux.HandleFunc("GET /"+dir+"/{name}", func(w http.ResponseWriter, r *http.Request) {
+			name := r.PathValue("name")
+			ct := imageTypes[path.Ext(name)]
+			b, err := images.ReadFile(dir + "/" + name)
+			if ct == "" || err != nil {
+				http.NotFound(w, r)
+				return
+			}
+			h := w.Header()
+			h.Set("Content-Type", ct)
+			h.Set("Cache-Control", "public, max-age=86400")
+			h.Set("X-Content-Type-Options", "nosniff")
+			w.Write(b)
+		})
+	}
 	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte("ok\n")) })
 	return mux
 }
