@@ -46,6 +46,14 @@
   }
   .shot { display: block; margin: 10px 0 12px; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
   .shot img { display: block; width: 100%; height: auto; }
+  .robots { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 10px 0 12px; }
+  .robots a { display: block; text-decoration: none; border-radius: 12px; }
+  .robots a:hover, .robots a:focus-visible { background: var(--bg); }
+  .robots a:hover figcaption { color: var(--accent); }
+  .robots figure { margin: 0; text-align: center; }
+  .robots img { width: 100%; height: auto; display: block; }
+  .robots figcaption { color: var(--muted); font-size: 0.85rem; }
+  @media (max-width: 640px) { .robots { grid-template-columns: repeat(3, 1fr); } }
   .more { font-weight: 600; }
   .more::after { content: " \2192"; }
   footer { color: var(--muted); font-size: 0.92rem; margin-top: 36px; display: flex; flex-wrap: wrap; gap: 6px 18px; }
@@ -61,8 +69,13 @@
   <div class="cards">
     <section class="card">
       <h2><a href="https://s.i41.eu">s.i41.eu</a><span class="tag">proof of concept</span></h2>
-      <a class="shot" href="https://s.i41.eu"><img src="/img/i41-robot.webp" width="640" height="360"
-        alt="A 3D model of the Stackchan desktop robot, the first device of the i41 home platform"></a>
+      <div class="robots">
+        <a href="https://s.i41.eu/#pet"><figure><img src="/img/robot3d-pet.webp" width="240" height="240" alt="The robot running the pet: a happy orange face"><figcaption>Pet</figcaption></figure></a>
+        <a href="https://s.i41.eu/#focus"><figure><img src="/img/robot3d-focus.webp" width="240" height="240" alt="The robot running Focus: a red ring, 17:42 left, its LEDs counting down"><figcaption>Focus</figcaption></figure></a>
+        <a href="https://s.i41.eu/#raw"><figure><img src="/img/robot3d-raw.webp" width="240" height="240" alt="The robot running Raw data: its own readings on its screen"><figcaption>Raw data</figcaption></figure></a>
+        <a href="https://s.i41.eu/#dev"><figure><img src="/img/robot3d-dev.webp" width="240" height="240" alt="The robot running Dev: a program's card, Build: All tests pass, its LEDs a full green bar"><figcaption>Dev</figcaption></figure></a>
+        <a href="https://s.i41.eu/#connect"><figure><img src="/img/robot3d-qr.webp" width="240" height="240" alt="The robot's QR screen: scan it to pair a phone"><figcaption>QR to pair</figcaption></figure></a>
+      </div>
       <p>An open-source home platform, local first and privacy first: your robots, devices and
       apps work at home, and the online part only helps. The first device is
       <a href="https://shop.m5stack.com/products/stackchan-kawaii-co-created-open-source-ai-desktop-robot" target="_blank" rel="noopener" data-ext="m5stack.com">M5Stack's Stackchan robot</a>,

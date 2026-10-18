@@ -252,7 +252,7 @@ func TestStackchanRobotRow(t *testing.T) {
 		t.Error("index.html: still the single i41-robot picture")
 	}
 	for name, anchor := range map[string]string{"pet": "pet", "focus": "focus", "raw": "raw", "dev": "dev", "qr": "connect"} {
-		re := regexp.MustCompile(`<a href="https://s\.i41\.eu/#` + anchor + `"[^>]*>\s*<figure><img src="/img/robot3d-` + name + `\.webp"[^>]* alt="[^"]+"`)
+		re := regexp.MustCompile(`<a href="https://s\.i41\.eu/#` + anchor + `"[^>]*>\s*<figure><img src="/img/robot3d-` + name + `(?:\.[0-9a-f]{8})?\.webp"[^>]* alt="[^"]+"`)
 		if !re.MatchString(s) {
 			t.Errorf("index.html: no robot3d-%s.webp linking to s.i41.eu/#%s", name, anchor)
 		}
