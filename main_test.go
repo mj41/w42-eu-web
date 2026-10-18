@@ -35,12 +35,18 @@ func TestImages(t *testing.T) {
 	srv := httptest.NewServer(handler())
 	defer srv.Close()
 	for p, want := range map[string]int{
-		"/mcbot/acam-1-dusk-plains.webp":         200,
-		"/mcbot/acam-1-dusk-plains-small.webp":   200,
-		"/mcbot/acam-2-harvest-field.webp":       200,
-		"/mcbot/acam-2-harvest-field-small.webp": 200,
-		"/mcbot/acam-3-harvest-wheat.webp":       200,
-		"/mcbot/acam-3-harvest-wheat-small.webp": 200,
+		"/mcbot/acam-1-long-walk.webp":           200,
+		"/mcbot/acam-1-long-walk-small.webp":     200,
+		"/mcbot/acam-3-dusk-shelter.webp":        200,
+		"/mcbot/acam-3-dusk-shelter-small.webp":  200,
+		"/mcbot/acam-5-day2-morning.webp":        200,
+		"/mcbot/acam-5-day2-morning-small.webp":  200,
+		"/mcbot/acam-1-dusk-plains.webp":         404,
+		"/mcbot/acam-1-dusk-plains-small.webp":   404,
+		"/mcbot/acam-2-harvest-field.webp":       404,
+		"/mcbot/acam-2-harvest-field-small.webp": 404,
+		"/mcbot/acam-3-harvest-wheat.webp":       404,
+		"/mcbot/acam-3-harvest-wheat-small.webp": 404,
 		"/mcbot/dashboard.png":                   404, // the dashboard is private; no screenshot
 		"/mcbot/dashboard-small.webp":            404,
 		"/img/i41-robot.webp":                    200,
@@ -77,7 +83,7 @@ func TestImages(t *testing.T) {
 		}
 	}
 	// the page shows three action-camera views, small, each linking to the full size
-	for _, n := range []string{"acam-1-dusk-plains", "acam-2-harvest-field", "acam-3-harvest-wheat"} {
+	for _, n := range []string{"acam-1-long-walk", "acam-3-dusk-shelter", "acam-5-day2-morning"} {
 		for _, f := range []string{n + "-small.webp", n + ".webp"} {
 			if !bytes.Contains(mcbotHTML, []byte("/mcbot/"+f)) {
 				t.Errorf("mcbot.html does not name %s", f)
