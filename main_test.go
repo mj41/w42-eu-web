@@ -259,6 +259,14 @@ func TestStackchanRobotRow(t *testing.T) {
 	}
 }
 
+// The infinite.pm card shows the 4:1 LinkedIn banner picture.
+func TestInfinitePmBanner(t *testing.T) {
+	re := regexp.MustCompile(`<img src="/img/infinite-pm(?:\.[0-9a-f]{8})?\.webp" width="1280" height="320"`)
+	if !re.MatchString(string(indexPage)) {
+		t.Error("index.html: infinite.pm card img is not /img/infinite-pm.webp at width=1280 height=320")
+	}
+}
+
 // On narrow screens only robots 1, 3 and 5 show, in one row of three.
 func TestNarrowScreenThreeRobots(t *testing.T) {
 	s := string(indexPage)
