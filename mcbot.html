@@ -20,7 +20,9 @@
     font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   }
   main { max-width: 760px; margin: 0 auto; padding: 48px 16px 32px; }
-  h1 { font-size: 2.2rem; margin: 0 0 4px; letter-spacing: -0.02em; }
+  header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; margin: 0 0 4px; }
+  h1 { font-size: 2.2rem; margin: 0; letter-spacing: -0.02em; }
+  .home { font-size: 1rem; font-weight: 600; }
   .sub { color: var(--muted); margin: 0 0 32px; }
   .cards { display: grid; gap: 16px; }
   .card {
@@ -62,7 +64,10 @@
 </head>
 <body>
 <main>
-  <h1>mcbot.w42.eu</h1>
+  <header>
+    <h1>mcbot.w42.eu</h1>
+    <a class="home" href="https://w42.eu/">w42.eu</a>
+  </header>
   <p class="sub">Minecraft robots that play vanilla survival on their own: wood, tools, a shelter
   before the night, food, iron, a wheat field by the water. The goal is a robot that lives through
   a week of game days without dying. A proof of concept, vibe coded, not reviewed by humans yet.</p>
@@ -77,22 +82,22 @@
 
     <section class="card">
       <h2>What the robot sees</h2>
-      <p>Paused frames of the viewer's action camera, with the viewer's panels around it, from a kept test run. The robot's view is drawn by our own viewer, not the official Minecraft client, with textures of our own. Click for the full size.</p>
-      <a class="shot" href="#long-walk" title="The full size">
-        <img src="/mcbot/acam-1-long-walk-small.webp" width="640" height="360" loading="lazy"
-          alt="The viewer page: the robot walking across open country on day 1 in the action camera view, with the viewer's panels and timeline around it. It has gathered its first logs.">
+      <p>Screenshots of the viewer page, with the viewer's panels around the robot's view, from a kept test run. The robot's view is drawn by our own viewer, not the official Minecraft client, with textures of our own. Click for the full size.</p>
+      <a class="shot" href="#view-1" title="The full size">
+        <img src="/mcbot/view-1-botday4off-tick02998-small.webp" width="640" height="360" loading="lazy"
+          alt="The viewer page for run botday4off at tick 2998, with the robot's view and the viewer's panels around it.">
       </a>
-      <p class="caption">Day 1, about three minutes in: a long walk from the spawn.</p>
-      <a class="shot" href="#shelter" title="The full size">
-        <img src="/mcbot/acam-3-dusk-shelter-small.webp" width="640" height="360" loading="lazy"
-          alt="The viewer page: the robot at its shelter as the first night comes, with a stone pickaxe in hand, in the action camera view with the viewer's panels around it.">
+      <p class="caption">Run botday4off (2026-10-15), day 1, tick 2998.</p>
+      <a class="shot" href="#view-2" title="The full size">
+        <img src="/mcbot/view-2-botday4off-tick11563-small.webp" width="640" height="360" loading="lazy"
+          alt="The viewer page for run botday4off at tick 11563, with the robot's view and the viewer's panels around it.">
       </a>
-      <p class="caption">Day 1, dusk at the shelter.</p>
-      <a class="shot" href="#morning" title="The full size">
-        <img src="/mcbot/acam-5-day2-morning-small.webp" width="640" height="360" loading="lazy"
-          alt="The viewer page: the robot starting day 2 near its shelter, with a crafting table in hand, in the action camera view with the viewer's panels around it.">
+      <p class="caption">Run botday4off (2026-10-15), day 1, tick 11563.</p>
+      <a class="shot" href="#view-3" title="The full size">
+        <img src="/mcbot/view-3-botday4off-tick16414-small.webp" width="640" height="360" loading="lazy"
+          alt="The viewer page for run botday4off at tick 16414, with the robot's view and the viewer's panels around it.">
       </a>
-      <p class="caption">Day 2, morning.</p>
+      <p class="caption">Run botday4off (2026-10-15), day 1, tick 16414.</p>
     </section>
 
     <section class="card">
@@ -130,17 +135,17 @@
   </footer>
 </main>
 
-<a class="big" id="long-walk" href="#" title="Close">
-  <img src="/mcbot/acam-1-long-walk.webp" width="1600" height="900" loading="lazy"
-    alt="The viewer page: the robot walking across open country on day 1 in the action camera view, with the viewer's panels and timeline around it. It has gathered its first logs.">
+<a class="big" id="view-1" href="#" title="Close">
+  <img src="/mcbot/view-1-botday4off-tick02998.webp" width="1600" height="900" loading="lazy"
+    alt="The viewer page for run botday4off at tick 2998, with the robot's view and the viewer's panels around it.">
 </a>
-<a class="big" id="shelter" href="#" title="Close">
-  <img src="/mcbot/acam-3-dusk-shelter.webp" width="1600" height="900" loading="lazy"
-    alt="The viewer page: the robot at its shelter as the first night comes, with a stone pickaxe in hand, in the action camera view with the viewer's panels around it.">
+<a class="big" id="view-2" href="#" title="Close">
+  <img src="/mcbot/view-2-botday4off-tick11563.webp" width="1600" height="900" loading="lazy"
+    alt="The viewer page for run botday4off at tick 11563, with the robot's view and the viewer's panels around it.">
 </a>
-<a class="big" id="morning" href="#" title="Close">
-  <img src="/mcbot/acam-5-day2-morning.webp" width="1600" height="900" loading="lazy"
-    alt="The viewer page: the robot starting day 2 near its shelter, with a crafting table in hand, in the action camera view with the viewer's panels around it.">
+<a class="big" id="view-3" href="#" title="Close">
+  <img src="/mcbot/view-3-botday4off-tick16414.webp" width="1600" height="900" loading="lazy"
+    alt="The viewer page for run botday4off at tick 16414, with the robot's view and the viewer's panels around it.">
 </a>
 </body>
 </html>
