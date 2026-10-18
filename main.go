@@ -28,7 +28,7 @@ var mcbotHTML []byte
 // images are mcbot.html's screenshots, served at /mcbot/<name>, and index.html's pictures,
 // served at /img/<name>.
 //
-//go:embed mcbot/*.png mcbot/*.webp img/*.webp
+//go:embed mcbot/*.webp img/*.webp
 var images embed.FS
 
 // imageTypes are the images' content types by extension.

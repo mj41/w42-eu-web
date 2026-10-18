@@ -5,7 +5,7 @@ The [w42.eu](https://w42.eu) landing page: a list of mj41's projects
 with links to [mj41.cz](https://mj41.cz) and [GitHub](https://github.com/mj41) for more.
 
 It also serves [mcbot.w42.eu](https://mcbot.w42.eu), the Minecraft robots' page, with a
-screenshot of their dashboard (`mcbot/*.png|webp`: small in the page, the full size on click, by
+views from the robots' action camera (`mcbot/*.png|webp`: small in the page, the full size on click, by
 CSS alone). The Stackchan pages (s.i41.eu) are
 [i41eu-web](https://github.com/i41-eu/i41eu-web)'s.
 
