@@ -49,7 +49,12 @@ func TestImages(t *testing.T) {
 		"/mcbot/acam-3-harvest-wheat-small.webp": 404,
 		"/mcbot/dashboard.png":                   404, // the dashboard is private; no screenshot
 		"/mcbot/dashboard-small.webp":            404,
-		"/img/i41-robot.webp":                    200,
+		"/img/robot3d-pet.webp":                  200,
+		"/img/robot3d-focus.webp":                200,
+		"/img/robot3d-raw.webp":                  200,
+		"/img/robot3d-dev.webp":                  200,
+		"/img/robot3d-qr.webp":                   200,
+		"/img/i41-robot.webp":                    404,
 		"/img/infinite-pm.webp":                  200,
 		"/img/":                                  404,
 		"/img/nope.webp":                         404,
@@ -236,6 +241,20 @@ func TestHashedImageURLs(t *testing.T) {
 			if res, _ = get(host, wrong); res.StatusCode != 404 {
 				t.Errorf("%s: %d, want 404", wrong, res.StatusCode)
 			}
+		}
+	}
+}
+
+// The s.i41.eu card shows the same five robots as s.i41.eu, each linking to its app there.
+func TestStackchanRobotRow(t *testing.T) {
+	s := string(indexPage)
+	if strings.Contains(s, "i41-robot.webp") {
+		t.Error("index.html: still the single i41-robot picture")
+	}
+	for name, anchor := range map[string]string{"pet": "pet", "focus": "focus", "raw": "raw", "dev": "dev", "qr": "connect"} {
+		re := regexp.MustCompile(`<a href="https://s\.i41\.eu/#` + anchor + `"[^>]*>\s*<figure><img src="/img/robot3d-` + name + `\.webp"[^>]* alt="[^"]+"`)
+		if !re.MatchString(s) {
+			t.Errorf("index.html: no robot3d-%s.webp linking to s.i41.eu/#%s", name, anchor)
 		}
 	}
 }
