@@ -53,7 +53,7 @@
   .robots figure { margin: 0; text-align: center; }
   .robots img { width: 100%; height: auto; display: block; }
   .robots figcaption { color: var(--muted); font-size: 0.85rem; }
-  @media (max-width: 640px) { .robots { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 640px) { .robots { grid-template-columns: repeat(3, 1fr); } .robots a:nth-child(2), .robots a:nth-child(4) { display: none; } }
   .more { font-weight: 600; }
   .more::after { content: " \2192"; }
   footer { color: var(--muted); font-size: 0.92rem; margin-top: 36px; display: flex; flex-wrap: wrap; gap: 6px 18px; }
