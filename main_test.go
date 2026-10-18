@@ -259,6 +259,27 @@ func TestStackchanRobotRow(t *testing.T) {
 	}
 }
 
+// On narrow screens only robots 1, 3 and 5 show, in one row of three.
+func TestNarrowScreenThreeRobots(t *testing.T) {
+	s := string(indexPage)
+	i := strings.Index(s, "@media (max-width: 640px)")
+	if i < 0 {
+		t.Fatal("index.html: no max-width 640px media query")
+	}
+	m := s[i:]
+	if j := strings.Index(m, "\n"); j >= 0 {
+		m = m[:j]
+	}
+	for _, n := range []string{"2", "4"} {
+		if !strings.Contains(m, ".robots a:nth-child("+n+")") {
+			t.Errorf("index.html: narrow rule does not hide .robots a:nth-child(%s)", n)
+		}
+	}
+	if !strings.Contains(m, "repeat(3, 1fr)") {
+		t.Error("index.html: narrow robots row is not 3 columns")
+	}
+}
+
 func TestMcbotViewerShots(t *testing.T) {
 	s := string(mcbotPage)
 	if !strings.Contains(s, "drawn by our own viewer, not the official Minecraft client, with textures of our own") {
