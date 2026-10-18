@@ -308,7 +308,7 @@ func TestNarrowScreenThreeRobots(t *testing.T) {
 
 func TestMcbotViewerShots(t *testing.T) {
 	s := string(mcbotPage)
-	if !strings.Contains(s, "drawn by our own viewer, not the official Minecraft client, with textures of our own") {
+	if !strings.Contains(s, "drawn by our own viewer, not the official Minecraft client; the textures are Minecraft's own, &copy; Mojang Studios / Microsoft") {
 		t.Error("mcbot.html: missing the sentence on our own viewer")
 	}
 	for _, name := range viewShots {
