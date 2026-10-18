@@ -239,3 +239,26 @@ func TestHashedImageURLs(t *testing.T) {
 		}
 	}
 }
+
+func TestMcbotViewerShots(t *testing.T) {
+	s := string(mcbotPage)
+	if !strings.Contains(s, "drawn by our own viewer, not the official Minecraft client, with textures of our own") {
+		t.Error("mcbot.html: missing the sentence on our own viewer")
+	}
+	for _, name := range []string{"acam-1-long-walk", "acam-3-dusk-shelter", "acam-5-day2-morning"} {
+		re := regexp.MustCompile(`<img src="/mcbot/` + name + `[^"]*\.webp"[^>]*>`)
+		found := false
+		for _, tag := range re.FindAllString(s, -1) {
+			if strings.Contains(tag, name+"-small") {
+				continue
+			}
+			found = true
+			if !strings.Contains(tag, `width="1600" height="900"`) {
+				t.Errorf("%s: full-size img is not 1600x900: %s", name, tag)
+			}
+		}
+		if !found {
+			t.Errorf("%s: no full-size img", name)
+		}
+	}
+}
