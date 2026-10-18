@@ -31,42 +31,51 @@ func TestPage(t *testing.T) {
 	}
 }
 
+// the owner's three viewer screenshots, in page order
+var viewShots = []string{"view-1-botday4off-tick02998", "view-2-botday4off-tick11563", "view-3-botday4off-tick16414"}
+
 func TestImages(t *testing.T) {
 	srv := httptest.NewServer(handler())
 	defer srv.Close()
 	for p, want := range map[string]int{
-		"/mcbot/acam-1-long-walk.webp":           200,
-		"/mcbot/acam-1-long-walk-small.webp":     200,
-		"/mcbot/acam-3-dusk-shelter.webp":        200,
-		"/mcbot/acam-3-dusk-shelter-small.webp":  200,
-		"/mcbot/acam-5-day2-morning.webp":        200,
-		"/mcbot/acam-5-day2-morning-small.webp":  200,
-		"/mcbot/acam-1-dusk-plains.webp":         404,
-		"/mcbot/acam-1-dusk-plains-small.webp":   404,
-		"/mcbot/acam-2-harvest-field.webp":       404,
-		"/mcbot/acam-2-harvest-field-small.webp": 404,
-		"/mcbot/acam-3-harvest-wheat.webp":       404,
-		"/mcbot/acam-3-harvest-wheat-small.webp": 404,
-		"/mcbot/dashboard.png":                   404, // the dashboard is private; no screenshot
-		"/mcbot/dashboard-small.webp":            404,
-		"/img/robot3d-pet.webp":                  200,
-		"/img/robot3d-focus.webp":                200,
-		"/img/robot3d-raw.webp":                  200,
-		"/img/robot3d-dev.webp":                  200,
-		"/img/robot3d-qr.webp":                   200,
-		"/img/i41-robot.webp":                    404,
-		"/img/infinite-pm.webp":                  200,
-		"/img/":                                  404,
-		"/img/nope.webp":                         404,
-		"/img/%2e%2e%2fmain.go":                  404,
-		"/mcbot/":                                404,
-		"/mcbot/nope.png":                        404,
-		"/mcbot/../main.go":                      404,
-		"/mcbot/%2e%2e%2fmain.go":                404,
-		"/s/robot3d-focus.png":                   404, // i41eu-web's now
-		"/main.go":                               404,
-		"/x/main.go":                             404,
-		"/s/../go.mod":                           404,
+		"/mcbot/view-1-botday4off-tick02998.webp":       200,
+		"/mcbot/view-1-botday4off-tick02998-small.webp": 200,
+		"/mcbot/view-2-botday4off-tick11563.webp":       200,
+		"/mcbot/view-2-botday4off-tick11563-small.webp": 200,
+		"/mcbot/view-3-botday4off-tick16414.webp":       200,
+		"/mcbot/view-3-botday4off-tick16414-small.webp": 200,
+		"/mcbot/acam-1-long-walk.webp":                  404,
+		"/mcbot/acam-1-long-walk-small.webp":            404,
+		"/mcbot/acam-3-dusk-shelter.webp":               404,
+		"/mcbot/acam-3-dusk-shelter-small.webp":         404,
+		"/mcbot/acam-5-day2-morning.webp":               404,
+		"/mcbot/acam-5-day2-morning-small.webp":         404,
+		"/mcbot/acam-1-dusk-plains.webp":                404,
+		"/mcbot/acam-1-dusk-plains-small.webp":          404,
+		"/mcbot/acam-2-harvest-field.webp":              404,
+		"/mcbot/acam-2-harvest-field-small.webp":        404,
+		"/mcbot/acam-3-harvest-wheat.webp":              404,
+		"/mcbot/acam-3-harvest-wheat-small.webp":        404,
+		"/mcbot/dashboard.png":                          404, // the dashboard is private; no screenshot
+		"/mcbot/dashboard-small.webp":                   404,
+		"/img/robot3d-pet.webp":                         200,
+		"/img/robot3d-focus.webp":                       200,
+		"/img/robot3d-raw.webp":                         200,
+		"/img/robot3d-dev.webp":                         200,
+		"/img/robot3d-qr.webp":                          200,
+		"/img/i41-robot.webp":                           404,
+		"/img/infinite-pm.webp":                         200,
+		"/img/":                                         404,
+		"/img/nope.webp":                                404,
+		"/img/%2e%2e%2fmain.go":                         404,
+		"/mcbot/":                                       404,
+		"/mcbot/nope.png":                               404,
+		"/mcbot/../main.go":                             404,
+		"/mcbot/%2e%2e%2fmain.go":                       404,
+		"/s/robot3d-focus.png":                          404, // i41eu-web's now
+		"/main.go":                                      404,
+		"/x/main.go":                                    404,
+		"/s/../go.mod":                                  404,
 	} {
 		res, err := http.Get(srv.URL + p)
 		if err != nil {
@@ -88,12 +97,21 @@ func TestImages(t *testing.T) {
 		}
 	}
 	// the page shows three action-camera views, small, each linking to the full size
-	for _, n := range []string{"acam-1-long-walk", "acam-3-dusk-shelter", "acam-5-day2-morning"} {
+	last := -1
+	for _, n := range viewShots {
 		for _, f := range []string{n + "-small.webp", n + ".webp"} {
 			if !bytes.Contains(mcbotHTML, []byte("/mcbot/"+f)) {
 				t.Errorf("mcbot.html does not name %s", f)
 			}
 		}
+		i := bytes.Index(mcbotHTML, []byte("/mcbot/"+n+"-small.webp"))
+		if i <= last {
+			t.Errorf("mcbot.html: %s is not after the previous view", n)
+		}
+		last = i
+	}
+	if h, c := bytes.Index(mcbotHTML, []byte(`href="https://w42.eu/"`)), bytes.Index(mcbotHTML, []byte(`class="cards"`)); h < 0 || h > c {
+		t.Error("mcbot.html: no w42.eu link in the header, before the cards")
 	}
 	if bytes.Contains(mcbotHTML, []byte("/mcbot/dashboard")) || bytes.Contains(indexHTML, []byte("/mcbot/dashboard")) {
 		t.Error("a page still names the dashboard screenshot")
@@ -293,7 +311,7 @@ func TestMcbotViewerShots(t *testing.T) {
 	if !strings.Contains(s, "drawn by our own viewer, not the official Minecraft client, with textures of our own") {
 		t.Error("mcbot.html: missing the sentence on our own viewer")
 	}
-	for _, name := range []string{"acam-1-long-walk", "acam-3-dusk-shelter", "acam-5-day2-morning"} {
+	for _, name := range viewShots {
 		re := regexp.MustCompile(`<img src="/mcbot/` + name + `[^"]*\.webp"[^>]*>`)
 		found := false
 		for _, tag := range re.FindAllString(s, -1) {
