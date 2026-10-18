@@ -35,21 +35,27 @@ func TestImages(t *testing.T) {
 	srv := httptest.NewServer(handler())
 	defer srv.Close()
 	for p, want := range map[string]int{
-		"/mcbot/dashboard.png":        200,
-		"/mcbot/dashboard-small.webp": 200,
-		"/img/i41-robot.webp":         200,
-		"/img/infinite-pm.webp":       200,
-		"/img/":                       404,
-		"/img/nope.webp":              404,
-		"/img/%2e%2e%2fmain.go":       404,
-		"/mcbot/":                     404,
-		"/mcbot/nope.png":             404,
-		"/mcbot/../main.go":           404,
-		"/mcbot/%2e%2e%2fmain.go":     404,
-		"/s/robot3d-focus.png":        404, // i41eu-web's now
-		"/main.go":                    404,
-		"/x/main.go":                  404,
-		"/s/../go.mod":                404,
+		"/mcbot/acam-1-dusk-plains.webp":         200,
+		"/mcbot/acam-1-dusk-plains-small.webp":   200,
+		"/mcbot/acam-2-harvest-field.webp":       200,
+		"/mcbot/acam-2-harvest-field-small.webp": 200,
+		"/mcbot/acam-3-harvest-wheat.webp":       200,
+		"/mcbot/acam-3-harvest-wheat-small.webp": 200,
+		"/mcbot/dashboard.png":                   404, // the dashboard is private; no screenshot
+		"/mcbot/dashboard-small.webp":            404,
+		"/img/i41-robot.webp":                    200,
+		"/img/infinite-pm.webp":                  200,
+		"/img/":                                  404,
+		"/img/nope.webp":                         404,
+		"/img/%2e%2e%2fmain.go":                  404,
+		"/mcbot/":                                404,
+		"/mcbot/nope.png":                        404,
+		"/mcbot/../main.go":                      404,
+		"/mcbot/%2e%2e%2fmain.go":                404,
+		"/s/robot3d-focus.png":                   404, // i41eu-web's now
+		"/main.go":                               404,
+		"/x/main.go":                             404,
+		"/s/../go.mod":                           404,
 	} {
 		res, err := http.Get(srv.URL + p)
 		if err != nil {
@@ -69,6 +75,17 @@ func TestImages(t *testing.T) {
 		if !bytes.Contains(mcbotHTML, []byte("/mcbot/"+n.Name())) {
 			t.Errorf("mcbot.html does not name %s", n.Name())
 		}
+	}
+	// the page shows three action-camera views, small, each linking to the full size
+	for _, n := range []string{"acam-1-dusk-plains", "acam-2-harvest-field", "acam-3-harvest-wheat"} {
+		for _, f := range []string{n + "-small.webp", n + ".webp"} {
+			if !bytes.Contains(mcbotHTML, []byte("/mcbot/"+f)) {
+				t.Errorf("mcbot.html does not name %s", f)
+			}
+		}
+	}
+	if bytes.Contains(mcbotHTML, []byte("/mcbot/dashboard")) || bytes.Contains(indexHTML, []byte("/mcbot/dashboard")) {
+		t.Error("a page still names the dashboard screenshot")
 	}
 	// every image in img/ is named by index.html
 	names, _ = images.ReadDir("img")
