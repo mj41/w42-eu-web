@@ -96,7 +96,7 @@ func TestImages(t *testing.T) {
 			t.Errorf("mcbot.html does not name %s", n.Name())
 		}
 	}
-	// the page shows three action-camera views, small, each linking to the full size
+	// the page shows three viewer screenshots in order, small, each linking to the full size
 	last := -1
 	for _, n := range viewShots {
 		for _, f := range []string{n + "-small.webp", n + ".webp"} {
@@ -105,7 +105,7 @@ func TestImages(t *testing.T) {
 			}
 		}
 		i := bytes.Index(mcbotHTML, []byte("/mcbot/"+n+"-small.webp"))
-		if i <= last {
+		if i < 0 || i <= last {
 			t.Errorf("mcbot.html: %s is not after the previous view", n)
 		}
 		last = i
